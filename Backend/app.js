@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 import connectToDatabase from "./db/config.js"
 import router from "./Routes/UserRoutes.js";
 import passport from "./db/passport-jwt.js";
-import helmet from 'helmet';
+// import helmet from 'helmet';
 
 
 // import http from "http";
@@ -16,7 +16,7 @@ import helmet from 'helmet';
 // cors policy error handler for frontend
 const corsOption = {
   origin: process.env.FRONTEND_HOST,
-  Credential: true,
+ credentials: true,
   optionSuccessStatus: 200,
 };
 app.use(cors(corsOption));

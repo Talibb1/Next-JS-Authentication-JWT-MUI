@@ -1,6 +1,7 @@
 import setTokenCookies from "../Utils/GenerateToken/setTokenCookies.js";
 import isTokenExpired from "../Utils/isTokenExpired.js";
 import refreshAccessToken from "../Utils/RefreshAccessToken/refreshAccessToken.js";
+import RefreshToken from "../Model/RefreshToken.js";
 
 const accessTokenAuto = async (req, res, next) => {
   try {
@@ -14,6 +15,12 @@ const accessTokenAuto = async (req, res, next) => {
 
     if (!refreshToken) {
       return res.status(401).json({ message: "Refresh token is missing" });
+    }
+
+    // Check if the refresh token is blacklisted
+    const blacklistedToken = await RefreshToken.findOne({ token: refreshToken, blacklisted: true });
+    if (blacklistedToken) {
+      return res.status(403).json({ message: "Token is blacklisted" });
     }
 
     const {

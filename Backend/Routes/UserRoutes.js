@@ -10,6 +10,9 @@ import logoutController from "../Controller/logoutController.js";
 import changeUserPassword from "../Controller/changepassConroller.js";
 import forgetPassword from "../Controller/forgetPasswordController.js";
 import passwordResetController from "../Controller/passwordResetController.js";
+import ResendOtp from "../Controller/resendOtpController.js";
+import otpResendLimiter from "../middleware/otpResendLimiter.js";
+import blacklistUser from "../Controller/blacklistUserController.js";
 // import blacklistUserController from "../Controller/blacklistUserController.js";
 // import newAccessTokenController from "../Controller/newAccessTokenController.js";
 
@@ -21,7 +24,9 @@ import passwordResetController from "../Controller/passwordResetController.js";
 
 // public Routes
 router.post("/register", RegisterUser);
+router.post("/resend-otp", otpResendLimiter, ResendOtp);
 router.post("/varify-email", VerifyEmail);
+router.post("/blacklist-User", blacklistUser);
 router.post("/login", userLogin);
 router.post("/forgetPassword", forgetPassword);
 router.post("/passwordReset", passwordResetController);
@@ -37,7 +42,7 @@ router.post("/passwordReset", passwordResetController);
 // private/protected Routes
 
 router.get(
-  "/me",
+  "/profile",
   accessTokenAuto,
   passport.authenticate("jwt", { session: false }),
   userProfile

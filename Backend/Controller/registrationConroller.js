@@ -1,54 +1,62 @@
 import dotenv from "dotenv";
 dotenv.config();
 import bcrypt from "bcrypt";
-import sendEmail from "../Utils/EmailSend/sendEmail.js";
+import jwt from 'jsonwebtoken';
 import UserModel from "../Model/User.js";
+import UserOtp from "../Model/UserOtp.js";
+import { generateOtp, hashOtp, saveOtpToDatabase } from "../Utils/EmailSend/otpGenerate.js";
+import { sendOtpEmail } from "../Utils/EmailSend/SendOtp/emailUtils.js";
 
-// Constants for salt rounds and pepper
-const saltRounds = process.env.SALT;
+const saltRounds = Number(process.env.SALT);
 const pepper = process.env.PEPPER;
 
 const RegisterUser = async (req, res) => {
-  // Extract name, email, password, and confirmPassword from request body
   const { name, email, password, confirmPassword } = req.body;
 
-  // Step 1: Validate input data
   if (!name || !email || !password || !confirmPassword) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
-    // Step 2: Check if user already exists
     const user = await UserModel.findOne({ email });
     if (user) {
       return res.status(400).json({ message: "Email Already Exists" });
     }
 
-    // Step 3: Validate passwords match
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match" });
     }
 
-    // Step 4: Hash password and save user
-    const salt = await bcrypt.genSalt(Number(saltRounds));
+    const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(password + pepper, salt);
-    const document = new UserModel({
-      name: name,
-      email: email,
+
+    const otp = generateOtp();
+    const hashedOtp = await hashOtp(otp, saltRounds, pepper);
+
+    const newUser = new UserModel({
+      name,
+      email,
       password: hashedPassword,
     });
-    await document.save();
+    await newUser.save();
 
-    // Step 6: sendEmail With OPT
-    sendEmail(req, document);
+    await saveOtpToDatabase(UserOtp, newUser._id, hashedOtp);
+    await sendOtpEmail(email, otp, name);
 
-    // Step 7: Respond with success message
-    return res.status(201).json({ message: "User registered successfully" });
+    // Generate JWT token for email
+    const emailToken = jwt.sign({ email: newUser.email }, process.env.JWT_ACCESS_KEY, {
+      expiresIn: '10m'
+    });
+    res.cookie('emailToken', emailToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 10 * 60 * 1000
+    });
+
+    return res.status(201).json({ message: "User registered successfully. OTP sent to email." });
   } catch (err) {
     console.error(err);
-    return res
-      .status(500)
-      .json({ status: "failed", message: "Something went wrong" });
+    return res.status(500).json({ status: "failed", message: "Something went wrong" });
   }
 };
 

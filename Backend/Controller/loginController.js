@@ -3,6 +3,7 @@ import UserModel from "../Model/User.js";
 import dotenv from "dotenv";
 import generateTokens from "../Utils/GenerateToken/generateToken.js";
 import setTokenCookies from "../Utils/GenerateToken/setTokenCookies.js";
+import RefreshToken from "../Model/RefreshToken.js";
 dotenv.config();
 
 const userLogin = async (req, res) => {
@@ -28,6 +29,12 @@ const userLogin = async (req, res) => {
     );
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Check if the user's refresh token is blacklisted
+    const blacklistedToken = await RefreshToken.findOne({ user: user._id, blacklisted: true });
+    if (blacklistedToken) {
+      return res.status(403).json({ message: "User is blacklisted" });
     }
 
     // Step 5: Generate JWT Token
