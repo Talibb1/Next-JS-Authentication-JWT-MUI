@@ -17,7 +17,7 @@ const setTokenCookies = (
     maxAge: accessTokenMixAge,
     // SameSite: "none",
     // SameSite: "lax",
-    // SameSite: "strict", // adjust according to your requirement
+    SameSite: "strict", // adjust according to your requirement
   });
 
   // accessToken cookie
@@ -27,7 +27,7 @@ const setTokenCookies = (
     maxAge: refreshTokenMixAge,
     // SameSite: "none",
     // SameSite: "lax",
-    // SameSite: "strict", // adjust according to your requirement
+    SameSite: "strict", // adjust according to your requirement
   });
 };
 

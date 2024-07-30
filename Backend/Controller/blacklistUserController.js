@@ -17,7 +17,7 @@ const blacklistUser = async (req, res) => {
 
     // Check if any documents were modified
     if (result.modifiedCount === 0) {
-      return res.status(400).json({
+      return res.status(404).json({
         status: "failed",
         message: "No tokens found to blacklist for the specified user",
       });

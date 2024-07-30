@@ -8,7 +8,8 @@ const getFormattedDate = () => {
   return date.toLocaleDateString("en-GB", options);
 };
 const formattedDate = getFormattedDate();
-const sendEmail = async ({ to, subject, text, name, otp }) => {
+const sendEmail = async ({ to, subject, text, name, otp, token }) => {
+  const otpUrl = `${process.env.FRONTEND_HOST}/FormOtp?token=${token}&email=${encodeURIComponent(to)}`;
   try {
     const info = await transporter.sendMail({
       from: process.env.EMAIL_FROM,
@@ -126,9 +127,7 @@ const sendEmail = async ({ to, subject, text, name, otp }) => {
                   >
                     ${otp}
                   </p>
-                   <p><a href="${
-                     process.env.FRONTEND_HOST
-                   }/FormOtp?otp=${otp}" style="background-color:#90EE90; color:#000000; display:inline-block; padding:12px 40px; margin-top: 10px; text-align:center; text-decoration:none;" target="_blank">Verify Email Now</a></p>
+                   <p><a href="${otpUrl}" style="background-color:#90EE90; color:#000000; display:inline-block; padding:12px 40px; margin-top: 10px; text-align:center; text-decoration:none;" target="_blank">Verify Email Now</a></p>
                 </div>
               </div>
       

@@ -13,6 +13,7 @@ import passwordResetController from "../Controller/passwordResetController.js";
 import ResendOtp from "../Controller/resendOtpController.js";
 import otpResendLimiter from "../middleware/otpResendLimiter.js";
 import blacklistUser from "../Controller/blacklistUserController.js";
+import CancelRegistration from "../Controller/cancelRegistrationController.js";
 // import blacklistUserController from "../Controller/blacklistUserController.js";
 // import newAccessTokenController from "../Controller/newAccessTokenController.js";
 
@@ -27,6 +28,7 @@ router.post("/register", RegisterUser);
 router.post("/resend-otp", otpResendLimiter, ResendOtp);
 router.post("/varify-email", VerifyEmail);
 router.post("/blacklist-User", blacklistUser);
+router.post("/cancel-registration", CancelRegistration);
 router.post("/login", userLogin);
 router.post("/forgetPassword", forgetPassword);
 router.post("/passwordReset", passwordResetController);

@@ -1,3 +1,43 @@
+// import jwt from "jsonwebtoken";
+// import bcrypt from "bcrypt";
+// import RefreshToken from "../../Model/RefreshToken.js";
+
+// const verifyRefreshToken = async (refreshToken) => {
+//   try {
+//     // Step 1: Find the hashed refresh token in the database
+//     const refreshTokenRecord = await RefreshToken.findOne({
+//       token: refreshToken,
+//     });
+//     if (!refreshTokenRecord) {
+//       throw new Error("Invalid refresh token");
+//     }
+
+//     // Step 2: Hash the incoming refresh token to compare with stored hash
+//     const isMatch = await bcrypt.compare(
+//       refreshToken,
+//       refreshTokenRecord.token
+//     );
+//     if (!isMatch) {
+//       throw new Error("Invalid refresh token");
+//     }
+
+//     // Step 3: Verify the token's expiration
+//     const tokenDetail = jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
+//     return {
+//       tokenDetail,
+//       error: false,
+//       message: "Refresh token verified successfully",
+//     };
+//   } catch (error) {
+//     return {
+//       error: true,
+//       message: error.message || "Invalid refresh token",
+//     };
+//   }
+// };
+
+// export default verifyRefreshToken;
+
 import jwt from "jsonwebtoken";
 import RefreshToken from "../../Model/RefreshToken.js";
 
@@ -43,25 +83,3 @@ const verifyRefreshToken = async (refreshToken) => {
 };
 
 export default verifyRefreshToken;
-
-// import jwt from "jsonwebtoken";
-// import RefreshToken from "../Model/RefreshToken.js";
-
-// const verifyRefreshToken = async (refreshToken) => {
-//   const refreshTokenExists = await RefreshToken.findOne({ token: refreshToken });
-//   if (!refreshTokenExists) {
-//     throw new Error("Invalid refresh token");
-//   }
-
-//   try {
-//     const tokenDetail = jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
-//     return {
-//       tokenDetail,
-//       message: "Refresh token verified successfully",
-//     };
-//   } catch (error) {
-//    throw new Error("Invalid refresh token");
-//   }
-// };
-
-// export default verifyRefreshToken;

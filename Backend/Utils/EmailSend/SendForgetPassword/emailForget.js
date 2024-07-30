@@ -1,7 +1,7 @@
 import sendEmail from "./forgerSendEmail.js";
 
 export const emailForget = async (email, token, userId, userName) => {
-  const resetLink = `${process.env.FRONTEND_EMAIL_LINK}/Reset-Password/${userId}/${token}`;
+  const resetLink = `${process.env.FRONTEND_EMAIL_LINK}/Reset-Password?token=${encodeURIComponent(userId)}/${encodeURIComponent(token)}`;
 
   await sendEmail({
     to: email,

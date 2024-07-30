@@ -12,13 +12,19 @@ const forgetPassword = async (req, res) => {
 
     // Step 1: Validate email presence
     if (!email) {
-      return res.status(400).json({ message: "Email address is required." });
+      return res.status(400).json({
+        status: "failed",
+        message: "Email address is required.",
+      });
     }
 
     // Step 2: Check if the user exists
     const user = await UserModel.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "No account associated with this email address." });
+      return res.status(404).json({
+        status: "failed",
+        message: "No account associated with this email address.",
+      });
     }
 
     // Step 3: Generate a secure token
@@ -27,13 +33,19 @@ const forgetPassword = async (req, res) => {
       expiresIn: "15m", // Token validity period
     });
 
-    // Send password reset email
+    // Step 4: Send password reset email
     await emailForget(email, token, user._id, user.name);
 
-    return res.status(200).json({ message: "Password reset instructions have been sent to your email." });
+    return res.status(200).json({
+      status: "success",
+      message: "Password reset instructions have been sent to your email.",
+    });
   } catch (error) {
-    console.error("Error sending password reset email:", error);
-    return res.status(500).json({ message: "An error occurred while processing your request. Please try again later." });
+    console.error("Error sending password reset email:", error); // Log the error for debugging
+    return res.status(500).json({
+      status: "failed",
+      message: "An error occurred while processing your request. Please try again later.",
+    });
   }
 };
 
