@@ -1,5 +1,5 @@
 
-// Thtis moiddleware is used to set the auth header in the request also this used in only mobile application
+// // Thtis moiddleware is used to set the auth header in the request also this used in only mobile application
 
 // import isTokenExpired from "../Utils/isTokenExpired.js";
 

@@ -1,9 +1,7 @@
 import UserModel from "../Model/User.js";
-import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { emailForget } from "../Utils/EmailSend/SendForgetPassword/emailForget.js";
-
-dotenv.config();
+import { JWT_ACCESS_KEY } from "../constants/constants.js";
 
 const forgetPassword = async (req, res) => {
   try {
@@ -27,9 +25,8 @@ const forgetPassword = async (req, res) => {
       });
     }
 
-    
     // Step 3: Generate a secure token
-    const secretToken = user._id.toString() + process.env.JWT_ACCESS_KEY;
+    const secretToken = user._id.toString() + JWT_ACCESS_KEY;
     const token = jwt.sign({ _id: user._id }, secretToken, {
       expiresIn: "5m", // Token validity period
     });
@@ -45,7 +42,8 @@ const forgetPassword = async (req, res) => {
     console.error("Error sending password reset email:", error); // Log the error for debugging
     return res.status(500).json({
       status: "failed",
-      message: "An error occurred while processing your request. Please try again later.",
+      message:
+        "An error occurred while processing your request. Please try again later.",
     });
   }
 };

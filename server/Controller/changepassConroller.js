@@ -1,11 +1,6 @@
 import bcrypt from "bcrypt";
 import UserModel from "../Model/User.js";
-import dotenv from "dotenv";
-dotenv.config();
-
-// Constants for salt rounds and pepper
-const saltRounds = Number(process.env.SALT);
-const pepper = process.env.PEPPER;
+import { SALT, PEPPER } from "../constants/constants.js";
 
 const changeUserPassword = async (req, res) => {
   try {
@@ -40,7 +35,7 @@ const changeUserPassword = async (req, res) => {
 
     // Verify the current password
     const isMatch = await bcrypt.compare(
-      currentPassword + pepper,
+      currentPassword + PEPPER,
       user.password
     );
     if (!isMatch) {
@@ -50,9 +45,9 @@ const changeUserPassword = async (req, res) => {
       });
     }
 
-    // Generate a new salt and hash the new password with the salt and pepper
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashedNewPassword = await bcrypt.hash(newPassword + pepper, salt);
+    // Generate a new salt and hash the new password with the salt and PEPPER
+    const salt = await bcrypt.genSalt(Number(SALT));
+    const hashedNewPassword = await bcrypt.hash(newPassword + PEPPER, salt);
 
     // Update the user's password in the database using the new hashed password
     await UserModel.findByIdAndUpdate(req.user._id, {
@@ -65,7 +60,7 @@ const changeUserPassword = async (req, res) => {
       message: "Password changed successfully",
     });
   } catch (error) {
-    console.error("Error changing password:", error);  // Log the error for debugging
+    console.error("Error changing password:", error); // Log the error for debugging
     return res.status(500).json({
       status: "failed",
       message: "An internal server error occurred. Please try again later.",

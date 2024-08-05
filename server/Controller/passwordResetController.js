@@ -1,13 +1,8 @@
 import UserModel from "../Model/User.js";
-import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { SALT, PEPPER, JWT_ACCESS_KEY } from "../constants/constants.js";
 
-dotenv.config();
-
-// Constants for salt rounds and pepper
-const saltRounds = process.env.SALT;
-const pepper = process.env.PEPPER;
 
 const passwordResetController = async (req, res) => {
   try {
@@ -46,12 +41,12 @@ const passwordResetController = async (req, res) => {
     }
 
     // Verify token
-    const new_secret = user._id.toString() + process.env.JWT_ACCESS_KEY;
+    const new_secret = user._id.toString() + JWT_ACCESS_KEY;
     jwt.verify(token, new_secret);
 
     // Hash the new password
-    const salt = await bcrypt.genSalt(Number(saltRounds));
-    const hashedPassword = await bcrypt.hash(Password + pepper, salt);
+    const salt = await bcrypt.genSalt(Number(SALT));
+    const hashedPassword = await bcrypt.hash(Password + PEPPER, salt);
 
     // Update the user's password in the database
     await UserModel.findByIdAndUpdate(user._id, {
@@ -69,8 +64,7 @@ const passwordResetController = async (req, res) => {
         message: "Your session has expired, Please request a new one.",
       });
     }
-
-    console.error("Error resetting password:", error); // Log the error
+    console.error("Error resetting password:", error); 
     return res.status(500).json({
       status: "failed",
       message: "Error resetting password. Please try again later.",

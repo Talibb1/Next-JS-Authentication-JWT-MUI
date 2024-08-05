@@ -15,7 +15,7 @@ export const saveOtpToDatabase = async (
   hashedOtp,
   hashedToken
 ) => {
-  const otpExpiry = Date.now() + 2 * 60 * 1000; // OTP expires in 2 minute
+  const otpExpiry = Date.now() + 1 * 60 * 1000; // OTP expires in 2 minute
   const tokenExpiry = Date.now() + 60 * 60 * 1000; // Token expires in 6 minute (can be adjusted)
 
   await UserOtpModel.updateOne(
@@ -24,12 +24,3 @@ export const saveOtpToDatabase = async (
     { upsert: true }
   );
 };
-
-// export const saveOtpToDatabase = async (UserOtpModel, userId, hashedOtp) => {
-//   const otpExpiry = Date.now() + 60 * 1000; // OTP expires in 1 minute
-//   await UserOtpModel.updateOne(
-//     { userId },
-//     { otp: hashedOtp, otpExpiry },
-//     { upsert: true }
-//   );
-// };

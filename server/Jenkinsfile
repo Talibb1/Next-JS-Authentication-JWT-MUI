@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+
+    environment {
+        MONGO_DB_CONNECTION_STRING = credentials('process.environment.DATABASE_URL')
+        RENDER_API_KEY = credentials('process.environment.RENDER_API_KEY')
+        RENDER_FRONTEND_SERVICE_ID = credentials('process.environment.RENDER_FRONTEND_SERVICE_ID')
+        RENDER_BACKEND_SERVICE_ID = credentials('process.environment.RENDER_BACKEND_SERVICE_ID')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/your-repo/your-project.git'
+            }
+        }
+
+        stage('Build Docker Images') {
+            parallel {
+                stage('Build client') {
+                    steps {
+                        script {
+                            docker.build("client-image", "client")
+                        }
+                    }
+                }
+                stage('Build server') {
+                    steps {
+                        script {
+                            docker.build("server-image", "server")
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Render') {
+            steps {
+                script {
+                    sh '''
+                    curl -X POST -H "Authorization: Bearer ${RENDER_API_KEY}" \
+                        -H "Accept: application/json" \
+                        -H "Content-Type: application/json" \
+                        --data '{"clearCache":true}' \
+                        https://api.render.com/v1/services/${RENDER_FRONTEND_SERVICE_ID}/deploys
+                    '''
+                    sh '''
+                    curl -X POST -H "Authorization: Bearer ${RENDER_API_KEY}" \
+                        -H "Accept: application/json" \
+                        -H "Content-Type: application/json" \
+                        --data '{"clearCache":true}' \
+                        https://api.render.com/v1/services/${RENDER_BACKEND_SERVICE_ID}/deploys
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}

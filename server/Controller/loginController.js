@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import UserModel from "../Model/User.js";
-import dotenv from "dotenv";
 import generateTokens from "../Utils/GenerateToken/generateToken.js";
 import setTokenCookies from "../Utils/GenerateToken/setTokenCookies.js";
 import RefreshToken from "../Model/RefreshToken.js";
@@ -12,8 +11,7 @@ import {
 } from "../Utils/EmailSend/otpGenerate.js";
 import { sendOtpEmail } from "../Utils/EmailSend/SendOtp/emailUtils.js";
 import UserOtp from "../Model/UserOtp.js";
-
-dotenv.config();
+import { SALT, PEPPER, JWT_ACCESS_KEY } from "../constants/constants.js";
 
 const userLogin = async (req, res) => {
   try {
@@ -34,10 +32,7 @@ const userLogin = async (req, res) => {
       });
     }
 
-    const isMatch = await bcrypt.compare(
-      password + process.env.PEPPER,
-      user.password
-    );
+    const isMatch = await bcrypt.compare(password + PEPPER, user.password);
     if (!isMatch) {
       return res.status(401).json({
         status: "failed",
@@ -56,45 +51,40 @@ const userLogin = async (req, res) => {
       });
     }
 
-    const { accessToken, refreshToken, refreshTokenExp, accessTokenExp } =
+    // Generate tokens
+    const { accessToken, refreshToken, accessTokenExp, refreshTokenExp } =
       await generateTokens(user);
+    // Set Cookies
     setTokenCookies(
       res,
       accessToken,
       refreshToken,
-      refreshTokenExp,
-      accessTokenExp
+      accessTokenExp,
+      refreshTokenExp
     );
     // Update user's authentication status to true
-    user.is_auth = true;
-    await user.save();
 
     if (!user.is_verified) {
       const otp = generateOtp();
-      const hashedOtp = await hashOtp(
-        otp,
-        Number(process.env.SALT),
-        process.env.PEPPER
-      );
-      const token = jwt.sign({ email }, process.env.JWT_ACCESS_KEY, {
-        expiresIn: "1h",
-      }); // JWT token with 1 hour expiration
+      const hashedOtp = await hashOtp(otp, Number(SALT), PEPPER);
+
+      const token = jwt.sign({ email }, JWT_ACCESS_KEY, {
+        expiresIn: "30m",
+      }); // JWT token with 30 menitus expiration
 
       await saveOtpToDatabase(UserOtp, user._id, hashedOtp, token);
       await sendOtpEmail(email, otp, user.name);
 
       return res.status(200).json({
         status: "success",
-        message:
-          "Login successful. OTP and verification token sent to email for verification.",
-        token,
-        email,
+        message: "OTP sent to your email.",
         user: {
+          token,
           id: user._id,
           email: user.email,
           name: user.name,
           roles: user.roles[0],
-          is_auth: user.is_auth, // Set is_auth to true
+          is_auth: user.is_auth,
           is_verified: user.is_verified,
         },
         access_Token: accessToken,
@@ -103,16 +93,20 @@ const userLogin = async (req, res) => {
         refresh_Token_Expiration: refreshTokenExp,
       });
     }
+    
+    // Update user's authentication status to true
+    user.is_auth = true;
+    await user.save();
 
     return res.status(200).json({
       status: "success",
-      message: "Login successful. Redirecting to home page.",
+      message: "Login successful.",
       user: {
         id: user._id,
         email: user.email,
         name: user.name,
         roles: user.roles[0],
-        is_auth: user.is_auth, // Set is_auth to true
+        is_auth: user.is_auth,
         is_verified: user.is_verified,
       },
       access_Token: accessToken,
@@ -131,3 +125,5 @@ const userLogin = async (req, res) => {
 };
 
 export default userLogin;
+
+

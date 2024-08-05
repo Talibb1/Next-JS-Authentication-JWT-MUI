@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
 
-const refreshTokenSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+// Defining Schema
+const userRefreshTokenSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'UserInformation', required: true },
   token: { type: String, required: true },
   blacklisted: { type: Boolean, default: false },
-  expiresAt: { type: Date, required: true }
+  createdAt: { type: Date, default: Date.now, expires: '5d' }
 });
 
-const RefreshToken = mongoose.model("TokenVarification", refreshTokenSchema);
+// Model
+const UserRefreshTokenModel = mongoose.model("UserRefreshToken", userRefreshTokenSchema);
 
-export default RefreshToken;
+export default UserRefreshTokenModel;

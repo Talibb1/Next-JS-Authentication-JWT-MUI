@@ -1,51 +1,45 @@
-import setTokenCookies from "../Utils/GenerateToken/setTokenCookies.js";
-import isTokenExpired from "../Utils/isTokenExpired.js";
 import refreshAccessToken from "../Utils/RefreshAccessToken/refreshAccessToken.js";
-import RefreshToken from "../Model/RefreshToken.js";
+import isTokenExpired from "../Utils/isTokenExpired.js";
+import setTokensCookies from "../Utils/GenerateToken/setTokenCookies.js";
 
-const accessTokenAuto = async (req, res, next) => {
+const accessTokenAutoRefresh = async (req, res, next) => {
   try {
     const accessToken = req.cookies.accessToken;
-    const refreshToken = req.cookies.refreshToken;
-
+    
+    // Check if the access token is present and valid
     if (accessToken && !isTokenExpired(accessToken)) {
-      req.headers["authorization"] = `Bearer ${accessToken}`;
-      return next();
+      // Add the access token to the Authorization header
+      req.headers['authorization'] = `Bearer ${accessToken}`;
+    } else {
+      // Access token is missing or expired
+      const refreshToken = req.cookies.refreshToken;
+      if (!refreshToken) {
+        // Refresh token is also missing, return an error
+        return res.status(401).json({
+          status: "failed",
+          message: "Refresh token is missing",
+        });
+      }
+
+      // Attempt to refresh the access token
+      const { newAccessToken, newRefreshToken, newAccessTokenExp, newRefreshTokenExp } = await refreshAccessToken(req, res);
+
+      // Set new tokens in cookies
+      setTokensCookies(res, newAccessToken, newRefreshToken, newAccessTokenExp, newRefreshTokenExp);
+
+      // Add the new access token to the Authorization header
+      req.headers['authorization'] = `Bearer ${newAccessToken}`;
     }
 
-    if (!refreshToken) {
-      return res.status(401).json({ message: "Refresh token is missing" });
-    }
-
-    // Check if the refresh token is blacklisted
-    const blacklistedToken = await RefreshToken.findOne({ token: refreshToken, blacklisted: true });
-    if (blacklistedToken) {
-      return res.status(403).json({ message: "Token is blacklisted" });
-    }
-
-    const {
-      newAccessToken,
-      newRefreshToken,
-      newRefreshTokenExp,
-      newAccessTokenExp,
-    } = await refreshAccessToken(req, res);
-
-    setTokenCookies(
-      res,
-      newAccessToken,
-      newRefreshToken,
-      newRefreshTokenExp,
-      newAccessTokenExp
-    );
-
-    req.headers["authorization"] = `Bearer ${newAccessToken}`;
-    return next();
+    next();
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    console.error('Error in accessTokenAutoRefresh middleware:', error.message);
+    // Return an error response
+    res.status(401).json({
+      status: "failed",
+      message: "Unauthorized access or token refresh failed",
+    });
   }
 };
 
-export default accessTokenAuto;
-
-
+export default accessTokenAutoRefresh;

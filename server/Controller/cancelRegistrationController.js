@@ -1,6 +1,5 @@
 import UserModel from "../Model/User.js";
 import UserOtp from "../Model/UserOtp.js";
-import RefreshToken from "../Model/RefreshToken.js";
 
 const CancelRegistration = async (req, res) => {
   const { email } = req.body;
@@ -23,21 +22,13 @@ const CancelRegistration = async (req, res) => {
       });
     }
 
-    // Step 3: Delete the refresh token associated with the user
-    const refreshTokenDeleteResult = await RefreshToken.findOneAndDelete({ user: user._id });
-
-    // Step 4: Delete the OTP associated with the user
-    const otpDeleteResult = await UserOtp.findOneAndDelete({ userId: user._id });
-
-    // Step 5: Check if any document was actually deleted
-    if (!refreshTokenDeleteResult && !otpDeleteResult) {
-      return res.status(404).json({
-        status: "failed",
-        message: "No associated tokens or OTPs found for the user."
-      });
+    // Step 4: Check if OTP exists and delete it if found
+    const otpRecord = await UserOtp.findOne({ userId: user._id });
+    if (otpRecord) {
+      await UserOtp.deleteOne({ userId: user._id });
     }
 
-    // Step 6: Return success response
+    // Step 5: Return success response
     return res.status(200).json({
       status: "success",
       message: "User registration canceled."

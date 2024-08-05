@@ -14,35 +14,17 @@ import ResendOtp from "../Controller/resendOtpController.js";
 import otpResendLimiter from "../middleware/otpResendLimiter.js";
 import blacklistUser from "../Controller/blacklistUserController.js";
 import CancelRegistration from "../Controller/cancelRegistrationController.js";
-// import blacklistUserController from "../Controller/blacklistUserController.js";
-// import newAccessTokenController from "../Controller/newAccessTokenController.js";
-
-// import checkUserAuth from "../middleware/authMiddleware.js";
-
-// Router level Middleware To Protected Route
-// router.use("/changepassword", checkUserAuth);
-// router.use('/loggeduser', checkUserAuth);
 
 // public Routes
 router.post("/register", RegisterUser);
 router.post("/login", userLogin);
 router.post("/forgetPassword", forgetPassword);
-
-
-
 router.post("/blacklist-User", blacklistUser);
 router.post("/varify-email", VerifyEmail);
 router.post("/resend-otp", otpResendLimiter, ResendOtp);
 router.post("/cancel-registration", CancelRegistration);
 router.post("/passwordReset", passwordResetController);
-// router.post("/refresh-token", newAccessTokenController);
-// router.post('/blacklist', blacklistUserController);
-// router.post("/login", userlogin);
-// router.get("/user/home", mainController.home);
-// router.get("/register", mainController.register);
-// router.get("/login", mainController.login);
-// router.get("/resetPassword", mainController.resetPassword);
-// router.get("/changePassword", mainController.changePassword);
+
 
 // private/protected Routes
 
@@ -64,7 +46,6 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   changeUserPassword
 );
-// router.post("/changepassword", changeUserPassword);
-// router.get('/loggeduser', loggedUser)
+
 
 export default router;

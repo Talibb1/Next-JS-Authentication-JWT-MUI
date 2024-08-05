@@ -1,64 +1,39 @@
-// const setTokenCookies = (
-//   res,
-//   accessToken,
-//   refreshToken,
-//   refreshTokenExp,
-//   accessTokenExp
-// ) => {
-//   const accessTokenMixAge = (accessTokenExp - Math.floor(Date.now() / 1000)) * 1000;
-//   const refreshTokenMixAge =
-//     (refreshTokenExp - Math.floor(Date.now() / 1000)) * 1000;
+const setTokensCookies = (res, accessToken, refreshToken, newAccessTokenExp, newRefreshTokenExp) => {
+  if (!res || !accessToken || !refreshToken || !newAccessTokenExp || !newRefreshTokenExp) {
+    throw new Error('Missing required parameters');
+  }
 
-//   // accessToken cookie
-//   res.cookie("accessToken", accessToken, {
-//     httpOnly: true,
-//     secure: true, // set true to use secure cookies hhttps
-//     maxAge: accessTokenMixAge,
-//     // SameSite: "none",
-//     // SameSite: "lax",
-//     SameSite: "strict", // adjust according to your requirement
-//   });
+  const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+  const accessTokenMaxAge = (newAccessTokenExp - currentTimeInSeconds) * 1000;
+  const refreshTokenMaxAge = (newRefreshTokenExp - currentTimeInSeconds) * 1000;
 
+  try {
+    // Set Cookie for Access Token
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: true, // Set to true if using HTTPS
+      maxAge: accessTokenMaxAge,
+      sameSite: 'strict', // Adjust according to your requirements
+    });
 
-//   // accessToken cookie
-//   res.cookie("refreshToken", refreshToken, {
-//     httpOnly: true,
-//     secure: true, // set true to use secure cookies hhttps
-//     maxAge: refreshTokenMixAge,
-//     // SameSite: "none",
-//     // SameSite: "lax",
-//     SameSite: "strict", // adjust according to your requirement
-//   });
-// };
-
-// export default setTokenCookies;
-
-
-const setTokenCookies = (
-  res,
-  accessToken,
-  refreshToken,
-  refreshTokenExp,
-  accessTokenExp
-) => {
-  const accessTokenMaxAge = (accessTokenExp - Math.floor(Date.now() / 1000)) * 1000;
-  const refreshTokenMaxAge = (refreshTokenExp - Math.floor(Date.now() / 1000)) * 1000;
-
-  // accessToken cookie
-  res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    secure: true,
-    maxAge: accessTokenMaxAge,
-    sameSite: "strict", // adjust according to your requirement
-  });
-
-  // refreshToken cookie
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: true,
-    maxAge: refreshTokenMaxAge,
-    sameSite: "strict", // adjust according to your requirement
-  });
+    // Set Cookie for Refresh Token
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: true, // Set to true if using HTTPS
+      maxAge: refreshTokenMaxAge,
+      sameSite: 'strict', // Adjust according to your requirements
+    });
+    // Set Cookie for Refresh Token
+    res.cookie('is_auth', true, {
+      httpOnly: true,
+      secure: true, // Set to true if using HTTPS
+      maxAge: refreshTokenMaxAge,
+      sameSite: 'strict', // Adjust according to your requirements
+    });
+  } catch (error) {
+    // Handle errors appropriately
+    throw new Error('Failed to set cookies');
+  }
 };
 
-export default setTokenCookies;
+export default setTokensCookies;

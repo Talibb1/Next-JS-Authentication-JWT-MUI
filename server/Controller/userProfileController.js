@@ -1,6 +1,3 @@
-
-
-
 const userProfile = async (req, res) => {
   try {
     // Assuming you have a middleware that populates req.user
