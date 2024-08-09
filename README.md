@@ -3,12 +3,11 @@
 
 > Free Next JS Authentication System made with Material-UI components also TypeScript. 
 
-<p align="center">
-  <video src="
-https://github.com/user-attachments/assets/3c84db62-4e7a-4e52-af66-61f472498e19" width="500px"></video>
-</p>
 
 ## Demo
+<p align="center">
+  <video src="https://github.com/user-attachments/assets/3c84db62-4e7a-4e52-af66-61f472498e19" width="500px"></video>
+</p>
 
 - [Dashboard](https://github.com/Talibb1/Next-JS-Authentication-JWT-MUI/tree/main)
 
