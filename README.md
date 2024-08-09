@@ -3,7 +3,10 @@
 
 > Free Next JS Authentication System made with Material-UI components also TypeScript. 
 
-![preview](public/assets/preview.jpg)
+<p align="center">
+  <video src="
+https://github.com/user-attachments/assets/3c84db62-4e7a-4e52-af66-61f472498e19" width="500px"></video>
+</p>
 
 ## Demo
 
