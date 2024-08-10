@@ -9,17 +9,18 @@ interface PasswordFieldComponentProps {
   name: string;
   label: string;
   autoComplete: string;
+  showPassword: boolean;
+  handleClickShowPassword: () => void;
 }
 
 const PasswordFieldComponent: React.FC<PasswordFieldComponentProps> = ({
   name,
   label,
   autoComplete,
+  showPassword,
+  handleClickShowPassword,
 }) => {
-  const [showPassword, setShowPassword] = useState(false);
   const [field, meta] = useField(name);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   return (
     <TextField

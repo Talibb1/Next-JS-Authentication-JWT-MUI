@@ -23,7 +23,7 @@ router.post("/blacklist-User", blacklistUser);
 router.post("/varify-email", VerifyEmail);
 router.post("/resend-otp", otpResendLimiter, ResendOtp);
 router.post("/cancel-registration", CancelRegistration);
-router.post("/passwordReset", passwordResetController);
+router.post("/forgetPasswordLink", passwordResetController);
 
 
 // private/protected Routes

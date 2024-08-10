@@ -41,7 +41,7 @@ const OTPVerificationPage: React.FC = () => {
         {isLargeScreen && (
           <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'block' } }}>
             <Image
-              src="/assets/images/otp.svg"
+              src="/assets/otp.svg"
               alt="Illustration"
               width={700}
               height={500}

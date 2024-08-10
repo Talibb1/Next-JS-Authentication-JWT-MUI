@@ -47,6 +47,8 @@ export interface ApiResponse<T> {
   data: T;
 }
 export interface User {
+  id: string;
+  token: string;
   name: string;
   email: string;
   roles: string[];

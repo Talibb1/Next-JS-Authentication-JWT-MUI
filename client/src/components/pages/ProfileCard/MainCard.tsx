@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container } from '@mui/material';
 import UserCard from "./UserCard"
-import { useGetUserQuery } from '@/lib/services/auth';
+import { useGetUserQuery } from '@/lib/services/api';
 
 export default function MainCard() {
   const { data: response } = useGetUserQuery();

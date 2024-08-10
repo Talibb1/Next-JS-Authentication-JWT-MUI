@@ -1,6 +1,7 @@
 import ForgotPass from "@/components/pages/ForgotPassword/ForgotPass";
+import { Suspense } from "react";
 import type { Metadata } from "next";
-
+import Loader from "@/components/Loader";
 
 export const metadata: Metadata = {
   title: "Forgot Password",
@@ -12,9 +13,9 @@ export const metadata: Metadata = {
 
 const ForgotPassword = () => {
   return (
-
+    <Suspense fallback={<Loader />}>
       <ForgotPass />
-
+    </Suspense>
   );
 };
 

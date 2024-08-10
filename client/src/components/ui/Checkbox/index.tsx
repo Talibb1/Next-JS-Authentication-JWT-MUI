@@ -2,21 +2,18 @@
 
 import React from 'react';
 import { FormControlLabel, Checkbox } from '@mui/material';
+import { useField } from 'formik';
 
 interface CheckboxComponentProps {
-  value: string;
-  color?: 'primary' | 'secondary' | 'default';
+  name: string;
   label: string;
 }
 
-const CheckboxComponent: React.FC<CheckboxComponentProps> = ({
-  value,
-  color = 'primary',
-  label,
-}) => {
+const CheckboxComponent: React.FC<CheckboxComponentProps> = ({ name, label }) => {
+  const [field] = useField({ name, type: 'checkbox' });
   return (
     <FormControlLabel
-      control={<Checkbox value={value} color={color} />}
+      control={<Checkbox {...field} color="primary" />}
       label={label}
     />
   );

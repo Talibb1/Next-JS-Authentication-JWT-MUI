@@ -9,7 +9,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { Formik, Form, FormikHelpers } from "formik";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { SvgImageForgotPass } from "@/components/ui/SvgImage";
 import TextFieldComponent from "@/components/ui/InputField";
@@ -17,13 +16,14 @@ import ButtonComponent from "@/components/ui/Button";
 import { ValidationForgotPass } from "@/components/Validation";
 import ToastNotification from "@/components/ui/Notification";
 import { NotificationType } from "@/lib/types";
-import { authService } from "@/lib/services/authService";
+import { useForgetPasswordMutation } from "@/lib/services/api";
 
 const ForgotPass = () => {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const router = useRouter();
+
+  const [forgetPassword] = useForgetPasswordMutation();
 
   const [toastConfig, setToastConfig] = useState({
     type: "",
@@ -42,17 +42,9 @@ const ForgotPass = () => {
     values: typeof initialValues,
     { setSubmitting, resetForm }: FormikHelpers<typeof initialValues>
   ) => {
-    // Show "Sending request..." toast with spinner
-    setToastConfig({
-      type: "info",
-      message: "Sending request...",
-      trigger: true,
-    });
-
     try {
       // Perform the request
-      await authService.forgetPassword(values.email);
-
+      await forgetPassword({ email: values.email }).unwrap();
       // Update toast to show success message
       setToastConfig({
         type: "success",
@@ -65,13 +57,13 @@ const ForgotPass = () => {
 
       // Redirect after a short delay to allow the toast to be visible
       setTimeout(() => {
-        router.push("/");
+        // router.push("/");
       }, 2000);
     } catch (error: any) {
       // Update toast to show error message
       setToastConfig({
         type: "error",
-        message: error.response?.data?.message || "Please try again.",
+        message: error.data?.message  || "Please try again.",
         trigger: true,
       });
     } finally {
@@ -141,6 +133,7 @@ const ForgotPass = () => {
                     type="submit"
                     fullWidth
                     sx={{ mt: 3, mb: 2 }}
+                    isSubmitting={isSubmitting}
                   >
                     {isSubmitting ? <CircularProgress size={24} /> : "Submit"}
                   </ButtonComponent>

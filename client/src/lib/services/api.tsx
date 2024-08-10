@@ -1,6 +1,6 @@
 // authApi.ts
 
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   User,
   VerifyEmailData,
@@ -9,97 +9,133 @@ import {
   ProfileResponse,
   PasswordResetData,
   ChangePasswordData,
-  ApiResponse
-} from '../types'; // Adjust the path according to your file structure
+  ApiResponse,
+} from "../types";
+
+// Use environment variable for base URL
+const baseUrl = process.env.NEXT_APP_API_URL || "http://localhost:5000/api/user/";
 
 export const authApi = createApi({
-  reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/api/user/' }),
+  reducerPath: "authApi",
+  baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
     createUser: builder.mutation<ApiResponse<UserResponse>, User>({
       query: (user) => ({
-        url: 'register',
-        method: 'POST',
+        url: "register",
+        method: "POST",
         body: user,
         headers: {
-          'Content-type': 'application/json',
+          "Content-type": "application/json",
         },
       }),
     }),
+
     verifyEmail: builder.mutation<ApiResponse<null>, VerifyEmailData>({
       query: (data) => ({
-        url: 'verify-email',
-        method: 'POST',
+        url: "verify-email",
+        method: "POST",
         body: data,
         headers: {
-          'Content-type': 'application/json',
+          "Content-type": "application/json",
         },
       }),
     }),
+
+    resendOtp: builder.mutation<ApiResponse<null>, { email: string }>({
+      query: (data) => ({
+        url: "resend-otp",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-type": "application/json",
+        },
+      }),
+    }),
+
+    cancelRegistration: builder.mutation<ApiResponse<null>, { email: string }>({
+      query: (data) => ({
+        url: "cancel-registration",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-type": "application/json",
+        },
+      }),
+    }),
+
     loginUser: builder.mutation<ApiResponse<UserResponse>, LoginData>({
       query: (data) => ({
-        url: 'login',
-        method: 'POST',
+        url: "login",
+        method: "POST",
         body: data,
         headers: {
-          'Content-type': 'application/json',
+          "Content-type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
       }),
     }),
+
     getUser: builder.query<ApiResponse<ProfileResponse>, void>({
       query: () => ({
-        url: 'me',
-        method: 'GET',
-        credentials: 'include',
+        url: "profile",
+        method: "GET",
+        credentials: "include",
       }),
     }),
+
     logoutUser: builder.mutation<ApiResponse<null>, void>({
       query: () => ({
-        url: 'logout',
-        method: 'POST',
+        url: "logout",
+        method: "POST",
         body: {},
-        credentials: 'include',
+        credentials: "include",
       }),
     }),
-    resetPasswordLink: builder.mutation<ApiResponse<null>, { email: string }>({
+
+    forgetPasswordLink: builder.mutation<ApiResponse<null>, PasswordResetData>({
       query: (data) => ({
-        url: 'resetpassword',
-        method: 'POST',
+        url: "forgetPasswordLink",
+        method: "POST",
         body: data,
         headers: {
-          'Content-type': 'application/json',
+          "Content-type": "application/json",
         },
       }),
     }),
-    resetPassword: builder.mutation<ApiResponse<null>, PasswordResetData>({
+
+    forgetPassword: builder.mutation<ApiResponse<null>, { email: string }>({
       query: (data) => ({
-        url: 'resetpassword',
-        method: 'POST',
+        url: "forgetPassword",
+        method: "POST",
         body: data,
         headers: {
-          'Content-type': 'application/json',
+          "Content-type": "application/json",
         },
       }),
     }),
-    changePassword: builder.mutation<ApiResponse<null>, ChangePasswordData>({
-      query: (data) => ({
-        url: 'change-password',
-        method: 'POST',
-        body: data,
-        credentials: 'include',
-      }),
-    }),
+
+    changeUserPassword: builder.mutation<ApiResponse<null>, ChangePasswordData>(
+      {
+        query: (data) => ({
+          url: "changeUserPassword",
+          method: "POST",
+          body: data,
+          credentials: "include",
+        }),
+      }
+    ),
   }),
 });
 
 export const {
   useCreateUserMutation,
   useVerifyEmailMutation,
+  useResendOtpMutation,
+  useCancelRegistrationMutation,
   useLoginUserMutation,
   useGetUserQuery,
   useLogoutUserMutation,
-  useResetPasswordLinkMutation,
-  useResetPasswordMutation,
-  useChangePasswordMutation,
+  useForgetPasswordLinkMutation,
+  useForgetPasswordMutation,
+  useChangeUserPasswordMutation,
 } = authApi;

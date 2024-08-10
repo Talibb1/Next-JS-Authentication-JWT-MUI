@@ -124,7 +124,7 @@ const OtpForm: React.FC = () => {
     if (!email) return;
 
     try {
-      await resendOtp(email).unwrap();
+      await resendOtp({ email: email }).unwrap();
       setOtp(Array(4).fill(""));
       setTimer(60);
       setError(false);
@@ -148,7 +148,7 @@ const OtpForm: React.FC = () => {
     if (!email) return;
 
     try {
-      await cancelRegistration(email).unwrap();
+      await cancelRegistration({ email: email }).unwrap();
       setToastConfig({
         type: "success",
         message: "OTP request canceled.",

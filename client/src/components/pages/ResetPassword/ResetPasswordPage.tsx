@@ -11,7 +11,7 @@ import { Formik, Form, FormikHelpers } from "formik";
 import PasswordFieldComponent from "../../ui/PasswordField";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CircularProgress } from "@mui/material";
-import { SvgImageLogin } from "@/components/ui/SvgImage";
+import { SvgImageResetPass } from "@/components/ui/SvgImage";
 import ButtonComponent from "@/components/ui/Button";
 import { ValidationResetPass } from "@/components/Validation";
 import ToastNotification from "@/components/ui/Notification";
@@ -67,12 +67,12 @@ const ResetPasswordPage = () => {
       resetForm();
 
       setTimeout(() => {
-        router.replace("/");
+        router.replace("/Login");
       }, 2000);
     } catch (error: any) {
       setToastProps({
         type: "error",
-        message: error.response?.data?.message || "Password reset failed. Please try again.",
+        message: error.data?.message || "Password reset failed. Please try again.",
         trigger: true,
       });
     } finally {
@@ -101,7 +101,7 @@ const ResetPasswordPage = () => {
       >
         {isLargeScreen && (
           <Grid item md={7}>
-            <SvgImageLogin />
+            <SvgImageResetPass />
           </Grid>
         )}
         <Grid item xs={12} md={5}>

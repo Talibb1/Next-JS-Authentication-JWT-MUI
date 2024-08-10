@@ -20,13 +20,14 @@ import ButtonComponent from "@/components/ui/Button";
 import { ValidationSignup } from "@/components/Validation";
 import ToastNotification from "@/components/ui/Notification";
 import { NotificationType } from "@/lib/types";
-import { authService } from "@/lib/services/authService";
 import TextFieldComponent from "@/components/ui/InputField";
+import { useCreateUserMutation } from "@/lib/services/api";
 const SignupPages = () => {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const router = useRouter();
+  const [createUser] = useCreateUserMutation();
 
   const [showPassword, setShowPassword] = useState(false);
   const [toastConfig, setToastProps] = useState({
@@ -51,7 +52,7 @@ const SignupPages = () => {
 
   const onSubmit = async (values: typeof initialValues, { setSubmitting, resetForm }: FormikHelpers<typeof initialValues>) => {
     try {
-      const response = await authService.register(values);
+      const response =  await createUser({ email: values.email }).unwrap();
       const { token } = response;
       setToastProps({
         type: "success",
@@ -68,7 +69,7 @@ const SignupPages = () => {
     } catch (error: any) {
       setToastProps({
         type: "error",
-        message: error.response?.data?.message || "Signup failed. Please try again.",
+        message: error.data?.message  || "Signup failed. Please try again.",
         trigger: true,
       });
     } finally {

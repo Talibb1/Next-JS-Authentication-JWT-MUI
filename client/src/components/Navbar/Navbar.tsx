@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import Link from 'next/link';
 import UserMenu from './UserMenu';
 import { useRouter } from 'next/navigation';
-import { useGetUserQuery, useLogoutUserMutation } from '@/lib/services/auth';
+import { useGetUserQuery, useLogoutUserMutation } from '@/lib/services/api';
 
 const Layout: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);

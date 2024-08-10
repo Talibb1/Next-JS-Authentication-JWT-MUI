@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export const SvgImageSignUp = () => (
   <Image
-    src="assets/authentication.svg"
+    src="assets/signup.svg"
     alt="Illustration"
     width={700}
     height={500}
@@ -10,7 +10,7 @@ export const SvgImageSignUp = () => (
 );
 export const SvgImageLogin = () => (
   <Image
-    src="assets/authentication.svg"
+    src="assets/login.svg"
     alt="Illustration"
     width={700}
     height={500}
@@ -18,7 +18,7 @@ export const SvgImageLogin = () => (
 );
 export const SvgImageForgotPass = () => (
   <Image
-    src="assets/authentication.svg"
+    src="assets/forgotpass.svg"
     alt="Illustration"
     width={700}
     height={500}
@@ -26,9 +26,10 @@ export const SvgImageForgotPass = () => (
 );
 export const SvgImageResetPass = () => (
   <Image
-    src="assets/authentication.svg"
+    src="assets/resetpass.svg"
     alt="Illustration"
     width={700}
     height={500}
   />
 );
+
