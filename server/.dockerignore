@@ -11,3 +11,7 @@ npm-debug.log*
 .gitignore
 README.md
 LICENSE
+
+# local env files
+.env*.local
+.env.production
