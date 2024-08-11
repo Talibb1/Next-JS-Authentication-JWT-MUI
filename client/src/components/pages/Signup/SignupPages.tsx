@@ -52,8 +52,7 @@ const SignupPages = () => {
 
   const onSubmit = async (values: typeof initialValues, { setSubmitting, resetForm }: FormikHelpers<typeof initialValues>) => {
     try {
-      const response =  await createUser({ email: values.email }).unwrap();
-      const { token } = response;
+     await createUser({name: values.name, email: values.email, password: values.password , confirmPassword: values.confirmPassword}).unwrap();
       setToastProps({
         type: "success",
         message: "SignUp successful!",
@@ -63,8 +62,7 @@ const SignupPages = () => {
       resetForm();
 
       setTimeout(() => {
-        const loginUrl = `/Login?token=${encodeURIComponent(token)}`;
-        router.replace(loginUrl);
+        router.replace("/Login");
       }, 2000);
     } catch (error: any) {
       setToastProps({

@@ -63,15 +63,12 @@ const userLogin = async (req, res) => {
       refreshTokenExp
     );
     // Update user's authentication status to true
-
     if (!user.is_verified) {
       const otp = generateOtp();
       const hashedOtp = await hashOtp(otp, Number(SALT), PEPPER);
-
       const token = jwt.sign({ email }, JWT_ACCESS_KEY, {
-        expiresIn: "30m",
+        expiresIn: "1m",
       }); // JWT token with 30 menitus expiration
-
       await saveOtpToDatabase(UserOtp, user._id, hashedOtp, token);
       await sendOtpEmail(email, otp, user.name);
 

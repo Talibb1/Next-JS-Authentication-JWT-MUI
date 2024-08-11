@@ -25,7 +25,6 @@ router.post("/resend-otp", otpResendLimiter, ResendOtp);
 router.post("/cancel-registration", CancelRegistration);
 router.post("/forgetPasswordLink", passwordResetController);
 
-
 // private/protected Routes
 
 router.get(

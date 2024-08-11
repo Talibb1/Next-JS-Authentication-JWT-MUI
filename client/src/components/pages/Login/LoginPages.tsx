@@ -25,7 +25,7 @@ import { ValidationLogin } from "@/components/Validation";
 import ToastNotification from "@/components/ui/Notification";
 import { NotificationType } from "@/lib/types";
 import { useLoginUserMutation } from "@/lib/services/api";
-import  CircularProgress  from "@mui/material/CircularProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const LoginPages = () => {
   const theme = useTheme();
@@ -33,7 +33,6 @@ const LoginPages = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const router = useRouter();
   const [loginUser] = useLoginUserMutation();
-
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -60,8 +59,8 @@ const LoginPages = () => {
   ) => {
     try {
       const response = await loginUser(values).unwrap();
-      const { access_Token: token, user } = response;
-      const { email, is_verified } = user;
+      // const user = response.user; // Fixed: Added 'user' variable
+      const { token, email, is_verified } = response.user;
 
       setToastProps({
         type: "success",
@@ -69,23 +68,23 @@ const LoginPages = () => {
         trigger: true,
       });
 
-      
       resetForm();
 
       setTimeout(() => {
         if (!is_verified) {
-          const otpUrl = `/FormOtp?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`;
+          const otpUrl = `/FormOtp?token=${encodeURIComponent(
+            token
+          )}&email=${encodeURIComponent(email)}`;
           router.replace(otpUrl);
         } else {
           router.replace("/");
         }
       }, 2000);
     } catch (error: any) {
-      console.error("Error during login:", error); // Log the error
+      console.error("Error during login:", error);
       setToastProps({
         type: "error",
-        message:
-          error.response?.data?.message || "Login failed. Please try again.",
+        message: error.data?.message || "Login failed. Please try again.",
         trigger: true,
       });
     } finally {

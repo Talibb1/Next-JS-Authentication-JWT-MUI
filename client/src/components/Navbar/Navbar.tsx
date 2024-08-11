@@ -10,18 +10,25 @@ import UserMenu from './UserMenu';
 import { useRouter } from 'next/navigation';
 import { useGetUserQuery, useLogoutUserMutation } from '@/lib/services/api';
 
+
 const Layout: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [userData, setUserData] = useState<{ name: string, email: string, role: string } | null>(null);
   const router = useRouter();
+  
+  // Call the hook without passing the type like this.
   const { data: response } = useGetUserQuery();
   const [logoutUser] = useLogoutUserMutation();
 
   useEffect(() => {
     if (response?.user) {
       const user = response.user;
-      setIsAuthenticated(user.is_auth);
-      setUserData({ name: user.name, email: user.email, role: user.roles[0] });
+      setIsAuthenticated(user.is_auth || false);
+      setUserData({ 
+        name: user.name, 
+        email: user.email, 
+        role: user.roles?.[0] || 'user'
+      });
     }
   }, [response]);
 
@@ -34,7 +41,8 @@ const Layout: React.FC = () => {
       await logoutUser().unwrap();
       setIsAuthenticated(false);
       setUserData(null);
-      router.push('/Login');
+      window.location.reload();
+      router.push('/');
     } catch (error) {
       console.error('Failed to logout', error);
     }

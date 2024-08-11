@@ -19,7 +19,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ settings, anchorElUser, handleOpenU
   <Box sx={{ flexGrow: 0 }}>
     <Tooltip title="Open settings">
       <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-        <Avatar alt="Remy Sharp" src="assets/avatar_15.jpg" />
+        <Avatar alt="Remy Sharp" src="assets/avatar_12.jpg" />
       </IconButton>
     </Tooltip>
     <Menu

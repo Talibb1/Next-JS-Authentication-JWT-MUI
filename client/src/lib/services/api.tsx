@@ -10,7 +10,8 @@ import {
   PasswordResetData,
   ChangePasswordData,
   ApiResponse,
-} from "../types";
+  CreateUserInput,
+} from "../types"; // Adjust the import path based on your directory structure
 
 // Use environment variable for base URL
 const baseUrl = process.env.NEXT_APP_API_URL || "http://localhost:5000/api/user/";
@@ -19,7 +20,7 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
-    createUser: builder.mutation<ApiResponse<UserResponse>, User>({
+    createUser: builder.mutation<ApiResponse<UserResponse>,CreateUserInput>({
       query: (user) => ({
         url: "register",
         method: "POST",
@@ -31,10 +32,10 @@ export const authApi = createApi({
     }),
 
     verifyEmail: builder.mutation<ApiResponse<null>, VerifyEmailData>({
-      query: (data) => ({
-        url: "verify-email",
+      query: (user) => ({
+        url: "varify-email",
         method: "POST",
-        body: data,
+        body: user,
         headers: {
           "Content-type": "application/json",
         },

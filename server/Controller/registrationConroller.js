@@ -15,7 +15,7 @@ const RegisterUser = async (req, res) => {
       message: "All fields are required.",
     });
   }
-
+  
   try {
     // Step 2: Check if the email already exists
     const existingUser = await UserModel.findOne({ email });

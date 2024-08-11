@@ -36,14 +36,14 @@ const OTPVerificationPage: React.FC = () => {
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
-    <Container maxWidth="lg" style={{ paddingTop: "5rem" }}>
+    <Container maxWidth="lg" style={{ paddingTop: "1rem" }}>
       <Grid container spacing={2} direction={{ xs: "column", md: "row" }}>
         {isLargeScreen && (
           <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'block' } }}>
             <Image
-              src="/assets/otp.svg"
+              src="assets/otp.svg"
               alt="Illustration"
-              width={700}
+              width={550} 
               height={500}
             />
           </Grid>

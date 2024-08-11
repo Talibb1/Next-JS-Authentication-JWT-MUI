@@ -16,13 +16,33 @@ import ButtonComponent from "@/components/ui/Button";
 import { ValidationResetPass } from "@/components/Validation";
 import ToastNotification from "@/components/ui/Notification";
 import { NotificationType } from "@/lib/types";
+import { useForgetPasswordLinkMutation } from "@/lib/services/api";
+
+// Define the expected structure of the decoded query object
+interface DecodedQuery {
+  _id: string;
+  token: string;
+}
+
+// Explicitly type the `query` parameter as a string
+const decodeQuery = (query: string): DecodedQuery => {
+  const decodedQuery = Buffer.from(query, "base64").toString("utf-8");
+  const params = new URLSearchParams(decodedQuery);
+
+  return {
+    _id: params.get("u") || "", 
+    token: params.get("v") || "", 
+  };
+};
+
 const ResetPasswordPage = () => {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const data = searchParams.get("data");
+  const [forgetPasswordLink] = useForgetPasswordLinkMutation();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -44,21 +64,23 @@ const ResetPasswordPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!token) {
+    if (!data) {
       setToastProps({
         type: "error",
-        message: "Invalid OTP request",
+        message: "Invalid password reset request",
         trigger: true,
       });
     }
-  }, [token]);
+  }, [data]);
+
+  const { _id, token } = decodeQuery(data || ""); // Ensure `data` is a string
 
   const onSubmit = async (
     values: typeof initialValues,
     { setSubmitting, resetForm }: FormikHelpers<typeof initialValues>
   ) => {
     try {
-      await authService.resetPassword({ token, password: values.password });
+      await forgetPasswordLink({ _id:_id, token: token, Password: values.password, ConfirmPassword: values.confirmPassword }).unwrap();
       setToastProps({
         type: "success",
         message: "Password reset successful!",

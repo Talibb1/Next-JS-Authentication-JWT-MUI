@@ -1,4 +1,4 @@
-import OtpVarification from "@/components/pages/OtpForm/OtpForm";
+import OTPVerificationPage from "@/components/pages/OtpForm/OTPVerification";
 import type { Metadata } from "next";
 
 
@@ -12,9 +12,7 @@ export const metadata: Metadata = {
 
 const Otp = () => {
   return (
-
-      <OtpVarification />
-
+<OTPVerificationPage/>
   );
 };
 

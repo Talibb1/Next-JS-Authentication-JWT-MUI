@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -13,7 +15,7 @@ import ToastNotification from "../../ui/Notification";
 import {
   useVerifyEmailMutation,
   useResendOtpMutation,
-  useCancelRegistrationMutation
+  useCancelRegistrationMutation,
 } from "@/lib/services/api";
 
 const OtpForm: React.FC = () => {
@@ -97,20 +99,37 @@ const OtpForm: React.FC = () => {
       setIsButtonDisabled(true);
 
       try {
-        const result = await verifyEmail({ token, email, otp: otp.join("") }).unwrap();
-        setToastConfig({
-          type: "success",
-          message: result.message,
-          trigger: true,
-        });
-        setTimeout(() => {
-          router.replace("/");
-        }, 2000);
+        const result = await verifyEmail({
+          email: email,
+          otp: otp.join(""),
+          token: token,
+        }).unwrap();
+        console.log("API Response:", result); // Log the full response to inspect it
+
+        // Check if the response contains the expected data
+        if (result && result.message) {
+          setToastConfig({
+            type: "success",
+            message: result.message,
+            trigger: true,
+          });
+          setTimeout(() => {
+            router.replace("/");
+          }, 2000);
+        } else {
+          // Handle unexpected response structure
+          setToastConfig({
+            type: "error",
+            message: "Unexpected response from the server. Please try again.",
+            trigger: true,
+          });
+        }
       } catch (error: any) {
-        const errorMessage = error.data?.message || "OTP verification failed";
+        console.error("API Error:", error); // Log the error for debugging
+
         setToastConfig({
           type: "error",
-          message: errorMessage,
+          message: error.data?.message || "OTP verification failed",
           trigger: true,
         });
       } finally {
@@ -135,7 +154,10 @@ const OtpForm: React.FC = () => {
         trigger: true,
       });
     } catch (error: any) {
-      const errorMessage = error.data?.message || "Failed to resend OTP. Please try again.";
+      console.error("Resend OTP Error:", error); // Log the error for debugging
+
+      const errorMessage =
+        error.data?.message || "Failed to resend OTP. Please try again.";
       setToastConfig({
         type: "error",
         message: errorMessage,
@@ -158,7 +180,10 @@ const OtpForm: React.FC = () => {
         router.replace("/Login");
       }, 2000);
     } catch (error: any) {
-      const errorMessage = error.data?.message || "Failed to cancel OTP request.";
+      console.error("Cancel Registration Error:", error); // Log the error for debugging
+
+      const errorMessage =
+        error.data?.message || "Failed to cancel OTP request.";
       setToastConfig({
         type: "error",
         message: errorMessage,
