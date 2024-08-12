@@ -18,7 +18,7 @@
 # Server Dockerfile
 FROM node:14
 
-WORKDIR /app
+WORKDIR /index
 
 COPY package.json ./
 RUN npm install

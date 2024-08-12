@@ -25,7 +25,7 @@
 # Client Dockerfile
 FROM node:14
 
-WORKDIR /app
+WORKDIR /src/app
 
 COPY package.json ./
 RUN npm install

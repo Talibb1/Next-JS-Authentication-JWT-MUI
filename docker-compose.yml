@@ -38,46 +38,68 @@
 
 
 # In docker-compose.yml
+# version: '3.8'
+
+# services:
+#   server:
+#     build: ./server
+#     volumes:
+#       - ./server:/index
+#       - /app/node_modules
+#     ports:
+#       - "5000:5000"
+#     env_file:
+#       - ./server/.env
+#     networks:
+#       - app-network
+#     depends_on:
+#       - mongo
+
+#   client:
+#     build: ./client
+#     volumes:
+#       - ./client:/src/app
+#       - /app/node_modules
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - server
+#     networks:
+#       - app-network
+
+#   mongo:
+#     image: mongo:latest
+#     volumes:
+#       - mongo-data:/data/db
+#     ports:
+#       - "27017:27017"
+#     networks:
+#       - app-network
+
+# volumes:
+#   mongo-data:
+
+# networks:
+#   app-network:
+
+
+
+
 version: '3.8'
 
 services:
-  server:
-    build: ./server
-    volumes:
-      - ./server:/index
-      - /app/node_modules
-    ports:
-      - "5000:5000"
-    env_file:
-      - ./server/.env
-    networks:
-      - app-network
-    depends_on:
-      - mongo
-
   client:
     build: ./client
-    volumes:
-      - ./client:/src/app
-      - /app/node_modules
     ports:
       - "3000:3000"
-    depends_on:
-      - server
-    networks:
-      - app-network
+    environment:
+      - NODE_ENV=production
 
-  mongo:
-    image: mongo:latest
-    volumes:
-      - mongo-data:/data/db
+  server:
+    build: ./server
     ports:
-      - "27017:27017"
-    networks:
-      - app-network
-
-volumes:
-  mongo-data:
-
-networks:
-  app-network:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
