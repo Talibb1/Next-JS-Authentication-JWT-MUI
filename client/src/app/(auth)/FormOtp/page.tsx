@@ -1,5 +1,6 @@
 import OTPVerificationPage from "@/components/pages/OtpForm/OTPVerification";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 
 export const metadata: Metadata = {
@@ -12,7 +13,9 @@ export const metadata: Metadata = {
 
 const Otp = () => {
   return (
-<OTPVerificationPage/>
+    <Suspense fallback={<div>Loading...</div>}>
+      <OTPVerificationPage />
+    </Suspense>
   );
 };
 
