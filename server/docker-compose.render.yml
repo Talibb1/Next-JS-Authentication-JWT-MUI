@@ -1,22 +1,83 @@
+# version: '3.8'
+
+# services:
+#   frontend:
+#     build:
+#       context: ./client
+#       dockerfile: Dockerfile
+#     volumes:
+#       - ./client:/src/app
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - backend
+
+#   backend:
+#     build:
+#       context: ./server
+#       dockerfile: Dockerfile
+#     volumes:
+#       - ./server:/index
+#     ports:
+#       - "5000:5000"
+#     depends_on:
+#       - mongo
+
+#   mongo:
+#     build:
+#       context: ./db
+#       dockerfile: Dockerfile
+#     volumes:
+#       - mongo-data:/data/db
+#     ports:
+#       - "27017:27017"
+
+# volumes:
+#   mongo-data:
+
+
+
+# In docker-compose.yml
 version: '3.8'
 
 services:
-  frontend:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
+  server:
+    build: ./server
+    volumes:
+      - ./server:/index
+      - /app/node_modules
     ports:
-      - '3000:3000'
-    environment:
-      - REACT_APP_API_URL=process.env.REACT_APP_API_URL
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    networks:
+      - app-network
     depends_on:
-      - backend
+      - mongo
 
-  backend:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+  client:
+    build: ./client
+    volumes:
+      - ./client:/app
+      - /app/node_modules
     ports:
-      - '5000:5000'
-    environment:
-      - MONGODB_URI=process.env.DATABASE_URL
+      - "3000:3000"
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+volumes:
+  mongo-data:
+
+networks:
+  app-network:
