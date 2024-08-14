@@ -1,11 +1,10 @@
-// components/Loader.tsx
+"use client";
 
 import React from 'react';
-import { CircularProgress, Box, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
+import { PuffLoader } from 'react-spinners';
 
 const Loader: React.FC = () => {
-  const theme = useTheme();
-
   return (
     <Box
       sx={{
@@ -15,12 +14,10 @@ const Loader: React.FC = () => {
         height: '100vh',
       }}
     >
-      <CircularProgress
-        sx={{
-          color: theme.palette.primary.main,
-        }}
-        size={60} // Size of the loader
-        thickness={4} // Thickness of the loader circle
+      <PuffLoader
+        color="#1976d2" 
+        size={160}      
+        speedMultiplier={1.5} 
       />
     </Box>
   );

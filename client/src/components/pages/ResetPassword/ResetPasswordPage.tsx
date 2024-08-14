@@ -140,7 +140,7 @@ const ResetPasswordPage = () => {
               variant="h5"
               sx={{ mt: isLargeScreen ? 1 : 0 }}
             >
-              Reset Your Password
+              Reset Your Password 🔒
             </Typography>
             <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
               Please enter your new password below.

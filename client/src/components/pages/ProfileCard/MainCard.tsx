@@ -13,7 +13,7 @@ export default function MainCard() {
   useEffect(() => {
     if (response?.user) {
       const user = (response as any).user;
-            setIsAuthenticated(user.is_auth);
+      setIsAuthenticated(user.is_auth);
       setUserData({ 
         name: user.name, 
         email: user.email, 
@@ -27,6 +27,7 @@ export default function MainCard() {
     <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
       <Box>
         {isAuthenticated ? (
+          
           <UserCard 
             name={userData.name} 
             email={userData.email} 

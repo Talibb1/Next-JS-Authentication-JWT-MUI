@@ -75,6 +75,21 @@ const SignupPages = () => {
     }
   };
 
+
+   // Signup with Google
+   const handleGoogleSignup = async () => {
+    window.open(`http://localhost:5000/auth/google`, "_self");
+  };
+  // Signup with Facebook
+  const handleFacebookSignup = async () => {
+    window.open(`http://localhost:5000/auth/facebook`, "_self");
+  };
+
+  // Signup with GitHub
+  const handleGitHubSignup = async () => {
+    window.open(`http://localhost:5000/auth/github`, "_self");
+  };
+
   return (
     <Container
       component="main"
@@ -189,6 +204,8 @@ const SignupPages = () => {
                       color="primary"
                       href="#"
                       sx={{ mx: 2, fontSize: "3rem" }}
+                      onClick={handleGoogleSignup}
+                     
                     >
                       <GoogleIcon fontSize="inherit" />
                     </IconButton>
@@ -196,6 +213,7 @@ const SignupPages = () => {
                       color="primary"
                       href="#"
                       sx={{ mx: 2, fontSize: "3rem" }}
+                      onClick={handleGitHubSignup}
                     >
                       <GitHubIcon fontSize="inherit" />
                     </IconButton>
@@ -203,6 +221,7 @@ const SignupPages = () => {
                       color="primary"
                       href="#"
                       sx={{ mx: 2, fontSize: "3rem" }}
+                      onClick={handleFacebookSignup}
                     >
                       <FacebookIcon fontSize="inherit" />
                     </IconButton>

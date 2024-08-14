@@ -72,9 +72,7 @@ const LoginPages = () => {
 
       setTimeout(() => {
         if (!is_verified) {
-          const otpUrl = `/FormOtp?token=${encodeURIComponent(
-            token
-          )}&email=${encodeURIComponent(email)}`;
+          const otpUrl = `/FormOtp?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`;
           router.replace(otpUrl);
         } else {
           router.replace("/");
@@ -91,6 +89,23 @@ const LoginPages = () => {
       setSubmitting(false);
     }
   };
+
+  // Login with Google
+const handleGoogleLogin = async () => {
+  window.open(`http://localhost:5000/auth/google`, "_self");
+};
+
+// Login with Facebook
+const handleFacebookLogin = async () => {
+  window.open(`http://localhost:5000/auth/facebook`, "_self");
+};
+
+// Login with GitHub
+const handleGitHubLogin = async () => {
+  window.open(`http://localhost:5000/auth/github`, "_self");
+};
+
+
   return (
     <Container
       component="main"
@@ -192,24 +207,24 @@ const LoginPages = () => {
                   >
                     <IconButton
                       color="primary"
-                      href="#"
                       sx={{ mx: 2, fontSize: "3rem" }}
+                      onClick={handleGoogleLogin}
                     >
                       <GoogleIcon fontSize="inherit" />
                     </IconButton>
 
                     <IconButton
                       color="primary"
-                      href="#"
                       sx={{ mx: 2, fontSize: "3rem" }}
+                      onClick={handleGitHubLogin}
                     >
                       <GitHubIcon fontSize="inherit" />
                     </IconButton>
 
                     <IconButton
                       color="primary"
-                      href="#"
                       sx={{ mx: 2, fontSize: "3rem" }}
+                      onClick={handleFacebookLogin}
                     >
                       <FacebookIcon fontSize="inherit" />
                     </IconButton>

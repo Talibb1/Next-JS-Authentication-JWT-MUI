@@ -7,6 +7,9 @@ import "./middleware/passport_jwt.js";
 import passport from "passport";
 import helmet from "helmet";
 import { FRONTEND_HOST, PORT, DATABASE_URL } from "./constants/constants.js";
+// import setTokensCookies from "./Utils/GenerateToken/setTokenCookies.js";
+import authRoutes from "./Routes/socialAuthRoutes.js"; 
+import './Controller/google-strategy.js' 
 // import { fileURLToPath } from 'url';
 // import { dirname, join } from 'path';
 // import next from 'next';
@@ -50,6 +53,25 @@ app.use("/api/user", router);
 //   app.all('*', (req, res) => {
 //     return handle(req, res);
 //   });
+
+// // Google Auth Routes
+// app.get('/auth/google',
+//   passport.authenticate('google', { session: false, scope: ['profile', 'email'] }));
+
+// app.get('/auth/google/callback',
+//   passport.authenticate('google', { session: false, failureRedirect: `${FRONTEND_HOST}/Login` }),
+//   (req, res) => {
+
+//     // Access user object and tokens from req.user
+//     const { user, accessToken, refreshToken, accessTokenExp, refreshTokenExp } = req.user;
+//     setTokensCookies(res, accessToken, refreshToken, accessTokenExp, refreshTokenExp)
+
+//     // Successful authentication, redirect home.
+//     res.redirect(`${FRONTEND_HOST}`);
+//   });
+
+// Authentication Routes (Google, Facebook, GitHub)
+app.use(authRoutes); // Use the imported auth routes
 
 // Start the server
 const PORTS = PORT || 5000;
