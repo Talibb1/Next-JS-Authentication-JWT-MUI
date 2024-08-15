@@ -8,7 +8,8 @@ import passport from "passport";
 import helmet from "helmet";
 import { FRONTEND_HOST, PORT, DATABASE_URL } from "./constants/constants.js";
 import authRoutes from "./Routes/socialAuthRoutes.js"; 
-import './Controller/google-strategy.js' 
+import './Controller/google-strategy.js';
+
 // import { fileURLToPath } from 'url';
 // import { dirname, join } from 'path';
 // import next from 'next';
@@ -17,7 +18,7 @@ import './Controller/google-strategy.js'
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = dirname(__filename);
 // const dev = process.env.NODE_ENV !== 'production';
-// const nextApp = next({ dev, dir: join(__dirname, './client') });
+// const nextApp = next({ dev, dir: join(__dirname, '../client') });
 // const handle = nextApp.getRequestHandler();
 
 // Express app initialization
@@ -37,29 +38,27 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 // Connect to database
-const DATABASES_URL = DATABASE_URL;
-connectToDatabase(DATABASES_URL);
+connectToDatabase(DATABASE_URL);
 
-// Serve static files from Next.js build
-// app.use(express.static(join(__dirname, './client/.next/static')));
+// // Serve static files from Next.js build
+// app.use(express.static(join(__dirname, '../client/.next/static')));
 
-
-// Handle Next.js routes
+// // Handle Next.js routes
 // nextApp.prepare().then(() => {
-  //   // Define a route to handle Next.js pages
-  //   app.all('*', (req, res) => {
-    //     return handle(req, res);
-    //   });
-    
-    // API Routes
-    app.use("/api/user", router);
-    
-// Authentication Routes (Google, Facebook, GitHub)
-app.use(authRoutes); // Use the imported auth routes
+//   // Define a route to handle Next.js pages
+//   app.all('*', (req, res) => {
+//     return handle(req, res);
+//   });
 
-// Start the server
-const PORTS = PORT || 5000;
-app.listen(PORTS, () => {
-  console.log(`Server is running on port ${PORTS}.`);
-});
+  // API Routes
+  app.use("/api/user", router);
 
+  // Authentication Routes (Google, Facebook, GitHub)
+  app.use(authRoutes);
+
+  // Start the server
+  const PORTS = PORT || 5000;
+  app.listen(PORTS, () => {
+    console.log(`Server is running on port ${PORTS}.`);
+  });
+// });

@@ -1,30 +1,20 @@
-# # In server/Dockerfile
-# FROM node:18-alpine
+# Base image
+FROM node:18-alpine
 
-# WORKDIR /app
+# Set working directory
+WORKDIR /index.js
 
-# COPY package.json ./
-# COPY package-lock.json ./
-
-# RUN npm install
-
-# COPY . .
-
-# EXPOSE 5000
-
-# CMD ["npm", "start"]
-
-
-# Server Dockerfile
-FROM node:14
-
-WORKDIR /index
-
+# Install dependencies
 COPY package.json ./
+COPY package-lock.json ./
 RUN npm install
 
+# Copy the rest of the application code
 COPY . .
 
+# Expose the port your app runs on
 EXPOSE 5000
 
-CMD ["npm", "run", "dev"]
+# Start the app
+CMD ["npm","run", "dev"]
+
