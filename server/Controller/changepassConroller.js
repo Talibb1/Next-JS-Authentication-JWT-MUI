@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import UserModel from "../Model/User.js";
+import UserPasswordModel from "../Model/UserPassword.js";
 import { SALT, PEPPER } from "../constants/constants.js";
 
 const changeUserPassword = async (req, res) => {
@@ -14,7 +14,6 @@ const changeUserPassword = async (req, res) => {
         message: "All fields are required",
       });
     }
-
     // Check if new password and confirmation password match
     if (newPassword !== newPasswordConfirmation) {
       return res.status(400).json({
@@ -23,20 +22,20 @@ const changeUserPassword = async (req, res) => {
       });
     }
 
-    // Fetch the user's current hashed password from the database
-    const user = await UserModel.findById(req.user._id);
+    // Fetch the user's password document from the database using userId
+    const userPasswordDoc = await UserPasswordModel.findOne({ userId: req._id });
 
-    if (!user) {
+    if (!userPasswordDoc) {
       return res.status(404).json({
         status: "failed",
-        message: "User not found",
+        message: "User password information not found",
       });
     }
 
     // Verify the current password
-    const isMatch = await bcrypt.compare(
+    const isMatch = bcrypt.compare(
       currentPassword + PEPPER,
-      user.password
+      userPasswordDoc.password
     );
     if (!isMatch) {
       return res.status(401).json({
@@ -49,10 +48,16 @@ const changeUserPassword = async (req, res) => {
     const salt = await bcrypt.genSalt(Number(SALT));
     const hashedNewPassword = await bcrypt.hash(newPassword + PEPPER, salt);
 
-    // Update the user's password in the database using the new hashed password
-    await UserModel.findByIdAndUpdate(req.user._id, {
-      password: hashedNewPassword,
+    // Add the old password to the oldPasswords array and update the password
+    userPasswordDoc.oldPasswords.push({
+      password: userPasswordDoc.password,
+      changedAt: userPasswordDoc.passwordChangedAt,
     });
+    userPasswordDoc.password = hashedNewPassword;
+    userPasswordDoc.passwordChangedAt = Date.now();
+
+    // Save the updated document
+    await userPasswordDoc.save();
 
     // Return success message if password is changed successfully
     return res.status(200).json({

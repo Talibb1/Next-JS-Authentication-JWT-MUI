@@ -1,8 +1,8 @@
 import UserModel from "../Model/User.js";
+import UserPasswordModel from "../Model/UserPassword.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { SALT, PEPPER, JWT_ACCESS_KEY } from "../constants/constants.js";
-
 
 const passwordResetController = async (req, res) => {
   try {
@@ -19,7 +19,7 @@ const passwordResetController = async (req, res) => {
     if (Password !== ConfirmPassword) {
       return res.status(400).json({
         status: "failed",
-        message: "Password and Confirm Password do not match",
+        message: "Passwords do not match",
       });
     }
 
@@ -27,7 +27,7 @@ const passwordResetController = async (req, res) => {
     if (!_id || !token) {
       return res.status(400).json({
         status: "failed",
-        message: "User ID and Token is required",
+        message: "User ID and Token are required",
       });
     }
 
@@ -48,10 +48,19 @@ const passwordResetController = async (req, res) => {
     const salt = await bcrypt.genSalt(Number(SALT));
     const hashedPassword = await bcrypt.hash(Password + PEPPER, salt);
 
-    // Update the user's password in the database
-    await UserModel.findByIdAndUpdate(user._id, {
-      $set: { password: hashedPassword },
-    });
+    // Find the user's password entry in the UserPasswordModel
+    let userPassword = await UserPasswordModel.findOne({ userId: user._id });
+
+    if (!userPassword) {
+      return res.status(404).json({
+        status: "failed",
+        message: "Password not found, Please request a new one",
+      });
+    } else {
+      // Update the existing password entry
+      userPassword.password = hashedPassword;
+      await userPassword.save(); 
+    }
 
     return res.status(200).json({
       status: "success",
@@ -64,12 +73,13 @@ const passwordResetController = async (req, res) => {
         message: "Your session has expired, Please request a new one.",
       });
     }
-    console.error("Error resetting password:", error); 
+    console.error("Error resetting password:", error);
     return res.status(500).json({
       status: "failed",
       message: "Error resetting password. Please try again later.",
     });
   }
 };
+
 
 export default passwordResetController;

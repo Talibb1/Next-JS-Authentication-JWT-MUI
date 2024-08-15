@@ -24,7 +24,7 @@ const setTokensCookies = (res, accessToken, refreshToken, newAccessTokenExp, new
       sameSite: 'strict', // Adjust according to your requirements
     });
     // Set Cookie for Refresh Token
-    res.cookie('is_auth', true, {
+    res.cookie('isAuth', true, {
       httpOnly: true,
       secure: true, // Set to true if using HTTPS
       maxAge: refreshTokenMaxAge,

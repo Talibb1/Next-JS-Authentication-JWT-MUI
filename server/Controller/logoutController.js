@@ -28,8 +28,8 @@ const logoutController = async (req, res) => {
     tokenRecord.blacklisted = true;
     await tokenRecord.save();
 
-    // Update the user's is_auth field to false
-    await UserModel.findByIdAndUpdate(tokenRecord.userId, { is_auth: false });
+    // Update the user's isAuth field to false
+    await UserModel.findByIdAndUpdate(tokenRecord.userId, { isAuth: false });
 
     // Delete the refresh token from the database
     await RefreshToken.deleteOne({ token: refreshToken });
@@ -37,7 +37,7 @@ const logoutController = async (req, res) => {
     // Clear the cookies
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
-    res.clearCookie("is_auth");
+    res.clearCookie("isAuth");
     
     // Send success response
     return res.status(200).json({

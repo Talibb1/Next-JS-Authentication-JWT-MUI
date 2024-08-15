@@ -1,7 +1,7 @@
 const setUserCookies = (res, isAuth, userRole) => {
     try {
       // Set Cookie for Authentication Status
-      res.cookie('is_auth', isAuth, {
+      res.cookie('isAuth', isAuth, {
         httpOnly: true,
         secure: true, // Set to true if using HTTPS
         maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds

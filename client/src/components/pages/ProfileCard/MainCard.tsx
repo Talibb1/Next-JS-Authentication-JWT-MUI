@@ -13,7 +13,7 @@ export default function MainCard() {
   useEffect(() => {
     if (response?.user) {
       const user = (response as any).user;
-      setIsAuthenticated(user.is_auth);
+      setIsAuthenticated(user.isAuth);
       setUserData({ 
         name: user.name, 
         email: user.email, 

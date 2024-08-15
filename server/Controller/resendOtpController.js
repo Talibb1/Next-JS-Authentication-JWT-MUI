@@ -24,7 +24,7 @@ const resendOtp = async (req, res) => {
       });
     }
 
-    if (user.is_verified) {
+    if (user.isVerified) {
       return res.status(400).json({
         status: "failed",
         message: "Email is already verified.",

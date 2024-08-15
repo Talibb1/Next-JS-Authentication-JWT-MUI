@@ -10,7 +10,7 @@ const authPaths: string[] = [
 const protectedPaths: string[] = ["/Dashboard", "/Profile", "/Settings"]; // Add paths that require authentication
 
 export function middleware(request: NextRequest) {
-  const isAuthenticated = request.cookies.get("is_auth")?.value === "true";
+  const isAuthenticated = request.cookies.get("isAuth")?.value === "true";
   const url = request.nextUrl.clone();
 
   // If user is authenticated and trying to access auth paths (Login, Signup, etc.)

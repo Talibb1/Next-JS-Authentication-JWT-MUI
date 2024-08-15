@@ -7,7 +7,6 @@ import "./middleware/passport_jwt.js";
 import passport from "passport";
 import helmet from "helmet";
 import { FRONTEND_HOST, PORT, DATABASE_URL } from "./constants/constants.js";
-// import setTokensCookies from "./Utils/GenerateToken/setTokenCookies.js";
 import authRoutes from "./Routes/socialAuthRoutes.js"; 
 import './Controller/google-strategy.js' 
 // import { fileURLToPath } from 'url';
@@ -44,32 +43,17 @@ connectToDatabase(DATABASES_URL);
 // Serve static files from Next.js build
 // app.use(express.static(join(__dirname, './client/.next/static')));
 
-// API Routes
-app.use("/api/user", router);
 
 // Handle Next.js routes
 // nextApp.prepare().then(() => {
-//   // Define a route to handle Next.js pages
-//   app.all('*', (req, res) => {
-//     return handle(req, res);
-//   });
-
-// // Google Auth Routes
-// app.get('/auth/google',
-//   passport.authenticate('google', { session: false, scope: ['profile', 'email'] }));
-
-// app.get('/auth/google/callback',
-//   passport.authenticate('google', { session: false, failureRedirect: `${FRONTEND_HOST}/Login` }),
-//   (req, res) => {
-
-//     // Access user object and tokens from req.user
-//     const { user, accessToken, refreshToken, accessTokenExp, refreshTokenExp } = req.user;
-//     setTokensCookies(res, accessToken, refreshToken, accessTokenExp, refreshTokenExp)
-
-//     // Successful authentication, redirect home.
-//     res.redirect(`${FRONTEND_HOST}`);
-//   });
-
+  //   // Define a route to handle Next.js pages
+  //   app.all('*', (req, res) => {
+    //     return handle(req, res);
+    //   });
+    
+    // API Routes
+    app.use("/api/user", router);
+    
 // Authentication Routes (Google, Facebook, GitHub)
 app.use(authRoutes); // Use the imported auth routes
 
@@ -78,4 +62,4 @@ const PORTS = PORT || 5000;
 app.listen(PORTS, () => {
   console.log(`Server is running on port ${PORTS}.`);
 });
-// })
+

@@ -23,7 +23,7 @@ const Layout: React.FC = () => {
   useEffect(() => {
     if (response?.user) {
       const user = response.user;
-      setIsAuthenticated(user.is_auth || false);
+      setIsAuthenticated(user.isAuth || false);
       setUserData({ 
         name: user.name, 
         email: user.email, 

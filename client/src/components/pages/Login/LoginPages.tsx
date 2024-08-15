@@ -60,7 +60,7 @@ const LoginPages = () => {
     try {
       const response = await loginUser(values).unwrap();
       // const user = response.user; // Fixed: Added 'user' variable
-      const { token, email, is_verified } = response.user;
+      const { token, email, isVerified } = response.user;
 
       setToastProps({
         type: "success",
@@ -71,7 +71,7 @@ const LoginPages = () => {
       resetForm();
 
       setTimeout(() => {
-        if (!is_verified) {
+        if (!isVerified) {
           const otpUrl = `/FormOtp?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}`;
           router.replace(otpUrl);
         } else {

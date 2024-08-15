@@ -33,8 +33,8 @@ export interface User {
   id?: string;
   token: string;
   roles?: string[];
-  is_auth?: boolean;
-  is_verified?: boolean;
+  isAuth?: boolean;
+  isVerified?: boolean;
   name: string;
   email: string;
   password: string;
@@ -77,9 +77,9 @@ export interface ApiResponse<T> {
   user: {
     token: string;
     email: string;
-    is_verified: boolean;
+    isVerified: boolean;
     roles?: string[];
-    is_auth?: boolean;
+    isAuth?: boolean;
     name: string;
   };
 }

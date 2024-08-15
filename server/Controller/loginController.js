@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import UserModel from "../Model/User.js";
+import UserPasswordModel from "../Model/UserPassword.js"; // Import UserPasswordModel
 import generateTokens from "../Utils/GenerateToken/generateToken.js";
 import setTokenCookies from "../Utils/GenerateToken/setTokenCookies.js";
 import RefreshToken from "../Model/RefreshToken.js";
@@ -24,6 +25,7 @@ const userLogin = async (req, res) => {
       });
     }
 
+    // Fetch user information
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(404).json({
@@ -32,7 +34,16 @@ const userLogin = async (req, res) => {
       });
     }
 
-    const isMatch = await bcrypt.compare(password + PEPPER, user.password);
+    // Fetch user password from UserPassword model
+    const userPasswordDoc = await UserPasswordModel.findOne({ userId: user._id });
+    if (!userPasswordDoc) {
+      return res.status(404).json({
+        status: "failed",
+        message: "Invalid email or password.",
+      });
+    }
+
+    const isMatch = bcrypt.compare(password + PEPPER, userPasswordDoc.password);
     if (!isMatch) {
       return res.status(401).json({
         status: "failed",
@@ -47,13 +58,14 @@ const userLogin = async (req, res) => {
     if (blacklistedToken) {
       return res.status(403).json({
         status: "failed",
-        message: "User is blacklisted.",
+      message: "User is blacklisted. Login denied.",
       });
     }
 
     // Generate tokens
     const { accessToken, refreshToken, accessTokenExp, refreshTokenExp } =
       await generateTokens(user);
+
     // Set Cookies
     setTokenCookies(
       res,
@@ -62,13 +74,14 @@ const userLogin = async (req, res) => {
       accessTokenExp,
       refreshTokenExp
     );
-    // Update user's authentication status to true
-    if (!user.is_verified) {
+
+    // Handle user verification
+    if (!user.isVerified) {
       const otp = generateOtp();
       const hashedOtp = await hashOtp(otp, Number(SALT), PEPPER);
       const token = jwt.sign({ email }, JWT_ACCESS_KEY, {
         expiresIn: "1m",
-      }); // JWT token with 30 menitus expiration
+      }); // JWT token with 1 minute expiration
       await saveOtpToDatabase(UserOtp, user._id, hashedOtp, token);
       await sendOtpEmail(email, otp, user.name);
 
@@ -81,8 +94,8 @@ const userLogin = async (req, res) => {
           email: user.email,
           name: user.name,
           roles: user.roles[0],
-          is_auth: user.is_auth,
-          is_verified: user.is_verified,
+          isAuth: user.isAuth,
+          isVerified: user.isVerified,
         },
         access_Token: accessToken,
         refresh_Token: refreshToken,
@@ -92,7 +105,7 @@ const userLogin = async (req, res) => {
     }
     
     // Update user's authentication status to true
-    user.is_auth = true;
+    user.isAuth = true;
     await user.save();
 
     return res.status(200).json({
@@ -103,8 +116,8 @@ const userLogin = async (req, res) => {
         email: user.email,
         name: user.name,
         roles: user.roles[0],
-        is_auth: user.is_auth,
-        is_verified: user.is_verified,
+        isAuth: user.isAuth,
+        isVerified: user.isVerified,
       },
       access_Token: accessToken,
       refresh_Token: refreshToken,
@@ -122,5 +135,3 @@ const userLogin = async (req, res) => {
 };
 
 export default userLogin;
-
-

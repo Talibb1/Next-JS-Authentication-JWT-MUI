@@ -24,7 +24,7 @@ const VerifyEmail = async (req, res) => {
       });
     }
 
-    if (existingUser.is_verified) {
+    if (existingUser.isVerified) {
       return res.status(400).json({
         status: "failed",
         message: "Email is already verified.",
@@ -83,8 +83,8 @@ const VerifyEmail = async (req, res) => {
     }
 
     // Update user's verification status
-    existingUser.is_verified = true;
-    existingUser.is_auth = true;
+    existingUser.isVerified = true;
+    existingUser.isAuth = true;
     await existingUser.save();
 
     // Remove used OTP from the database
