@@ -11,10 +11,10 @@ import {
   ChangePasswordData,
   ApiResponse,
   CreateUserInput,
-} from "../types"; // Adjust the import path based on your directory structure
+} from "../types";
 
 // Use environment variable for base URL
-const baseUrl = process.env.NEXT_APP_API_URL || "https://next-js-authentication-jwt-mui-production.up.railway.app/";
+const baseUrl = process.env.NEXT_APP_API_URL || "https://next-js-authentication-jwt-mui-production.up.railway.app/api/user/";
 
 export const authApi = createApi({
   reducerPath: "authApi",

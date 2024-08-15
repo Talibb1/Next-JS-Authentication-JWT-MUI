@@ -9,6 +9,8 @@ import helmet from "helmet";
 import { FRONTEND_HOST, PORT, DATABASE_URL } from "./constants/constants.js";
 import authRoutes from "./Routes/socialAuthRoutes.js"; 
 import './Controller/google-strategy.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // import { fileURLToPath } from 'url';
 // import { dirname, join } from 'path';

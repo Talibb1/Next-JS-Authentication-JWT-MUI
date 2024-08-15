@@ -1,5 +1,7 @@
 import express from "express";
 const router = express.Router();
+import dotenv from 'dotenv';
+dotenv.config();
 import RegisterUser from "../Controller/registrationConroller.js";
 import VerifyEmail from "../Controller/verifyEmailController.js";
 import userLogin from "../Controller/loginController.js";
