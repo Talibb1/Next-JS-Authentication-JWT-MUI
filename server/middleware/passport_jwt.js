@@ -6,9 +6,9 @@ dotenv.config();
 
 
 // JWT strategy options
-var opts = {
+const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_ACCESS_KEY,
+  secretOrKey: process.env.JWT_ACCESS_KEY || 'yourSecretKeyForJWT',
 };
 
 // Configure the JWT strategy
