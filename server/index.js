@@ -53,7 +53,7 @@ connectToDatabase(DATABASE_URL);
 //   });
 
   // API Routes
-  app.use("/", router);
+  app.use("/api/user", router);
 
   // Authentication Routes (Google, Facebook, GitHub)
   // app.use(authRoutes);
