@@ -4,8 +4,8 @@ import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import UserModel from '../Model/User.js';
 import generateTokens from '../Utils/GenerateToken/generateToken.js';
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '../constants/constants.js';
-
+import dotenv from 'dotenv';
+dotenv.config();
 const createOrUpdateUser = async (profile, provider, done) => {
   try {
     let user = await UserModel.findOne({ email: profile._json.email });
@@ -41,8 +41,8 @@ const createOrUpdateUser = async (profile, provider, done) => {
 
 // Configure Google Strategy
 passport.use(new GoogleStrategy({
-  clientID: GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: "/auth/google/callback"
 },
   (accessToken, refreshToken, profile, done) => {
@@ -55,8 +55,8 @@ passport.use(new GoogleStrategy({
 
 // Configure Facebook Strategy
 passport.use(new FacebookStrategy({
-  clientID: FACEBOOK_CLIENT_ID,
-  clientSecret: FACEBOOK_CLIENT_SECRET,
+  clientID: process.env.FACEBOOK_CLIENT_ID,
+  clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
   callbackURL: "/auth/facebook/callback",
   profileFields: ['id', 'emails', 'name']
 },
@@ -77,8 +77,8 @@ passport.use(new FacebookStrategy({
 
 // Configure GitHub Strategy
 passport.use(new GitHubStrategy({
-  clientID: GITHUB_CLIENT_ID,
-  clientSecret: GITHUB_CLIENT_SECRET,
+  clientID: process.env.GITHUB_CLIENT_ID,
+  clientSecret: process.env.GITHUB_CLIENT_SECRET,
   callbackURL: "/auth/github/callback",
   scope: ['user:email']
 },
