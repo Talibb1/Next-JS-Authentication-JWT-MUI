@@ -1,12 +1,14 @@
 import UserModel from '../Model/User.js';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import passport from 'passport';
-import { JWT_ACCESS_KEY } from '../constants/constants.js';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 // JWT strategy options
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: JWT_ACCESS_KEY,
+  secretOrKey: process.env.JWT_ACCESS_KEY,
 };
 
 // Configure the JWT strategy
