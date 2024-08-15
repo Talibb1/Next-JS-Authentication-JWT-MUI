@@ -4,17 +4,18 @@ FROM node:18-alpine
 # Set working directory
 WORKDIR /app
 
-# Install dependencies
+# Copy dependency files
+COPY server/package.json ./
+COPY server/package-lock.json ./
 
-COPY package.json ./
-COPY package-lock.json ./
+# Install dependencies
 RUN npm install
 
 # Copy the rest of the application code
-COPY . .
+COPY server .
 
 # Expose the port your app runs on
 EXPOSE 5000
 
 # Start the app
-CMD ["node", "server/index.js"]
+CMD ["npm", "run", "dev"]
