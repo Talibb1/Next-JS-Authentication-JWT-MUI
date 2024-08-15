@@ -7,7 +7,7 @@ import "./middleware/passport_jwt.js";
 import passport from "passport";
 import helmet from "helmet";
 import { FRONTEND_HOST, PORT, DATABASE_URL } from "./constants/constants.js";
-import authRoutes from "./Routes/socialAuthRoutes.js"; 
+// import authRoutes from "./Routes/socialAuthRoutes.js"; 
 import './Controller/google-strategy.js';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -56,7 +56,7 @@ connectToDatabase(DATABASE_URL);
   app.use("/api/user", router);
 
   // Authentication Routes (Google, Facebook, GitHub)
-  app.use(authRoutes);
+  // app.use(authRoutes);
 
   // Start the server
   const PORTS = PORT || 5000;
