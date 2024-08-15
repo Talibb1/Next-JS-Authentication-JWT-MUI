@@ -2,11 +2,10 @@
 FROM node:18-alpine
 
 # Set working directory
-WORKDIR /index.js
+WORKDIR /app
 
 # Install dependencies
-COPY package.json ./
-COPY package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm install
 
 # Copy the rest of the application code
@@ -16,5 +15,4 @@ COPY . .
 EXPOSE 5000
 
 # Start the app
-CMD ["npm","run", "dev"]
-
+CMD ["node", "server/index.js"]
