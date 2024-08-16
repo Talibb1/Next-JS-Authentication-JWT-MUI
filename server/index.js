@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import connectToDatabase from "./db/config.js";
 import router from "./Routes/UserRoutes.js";
 import "./middleware/passport_jwt.js";
+// import "./middleware/setupProxy.js";
 import passport from "passport";
 import helmet from "helmet";
 import { FRONTEND_HOST, PORT, DATABASE_URL } from "./constants/constants.js";
@@ -27,13 +28,24 @@ dotenv.config();
 const app = express();
 
 // Middleware
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://next-js-authentication-jwt-mui.vercel.app',
+];
+
 app.use(
   cors({
-    origin: FRONTEND_HOST,
+    origin: function (origin, callback) {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
-    optionSuccessStatus: 200,
   })
 );
+
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
