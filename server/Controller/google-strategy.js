@@ -57,7 +57,7 @@ passport.use(new GoogleStrategy({
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_CLIENT_ID,
   clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-  callbackURL: "https://next-js-authentication-jwt-mui-production.up.railway.app/auth/facebook/callback",
+  callbackURL: "/auth/facebook/callback",
   profileFields: ['id', 'emails', 'name']
 },
   (accessToken, refreshToken, profile, done) => {
