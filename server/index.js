@@ -8,19 +8,9 @@ import router from "./Routes/UserRoutes.js";
 import "./middleware/passport_jwt.js";
 import passport from "passport";
 import helmet from "helmet";
-import {FRONTEND_HOST_PRODUCTION, PORT, DATABASE_URL } from "./constants/constants.js";
+import { FRONTEND_HOST_PRODUCTION, PORT, DATABASE_URL } from "./constants/constants.js";
 import authRoutes from "./Routes/socialAuthRoutes.js"; 
 import './Controller/google-strategy.js';
-
-// import { fileURLToPath } from 'url';
-// import { dirname, join } from 'path';
-// import next from 'next';
-// // Setup Next.js
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
-// const dev = process.env.NODE_ENV !== 'production';
-// const nextApp = next({ dev, dir: join(__dirname, '../client') });
-// const handle = nextApp.getRequestHandler();
 
 // Express app initialization
 const app = express();
@@ -51,25 +41,14 @@ app.use(passport.initialize());
 // Connect to database
 connectToDatabase(DATABASE_URL);
 
-// // Serve static files from Next.js build
-// app.use(express.static(join(__dirname, '../client/.next/static')));
+// API Routes
+app.use("/api/user", router);
 
-// // Handle Next.js routes
-// nextApp.prepare().then(() => {
-//   // Define a route to handle Next.js pages
-//   app.all('*', (req, res) => {
-//     return handle(req, res);
-//   });
+// Authentication Routes (Google, Facebook, GitHub)
+app.use(authRoutes);
 
-  // API Routes
-  app.use("/api/user", router);
-
-  // Authentication Routes (Google, Facebook, GitHub)
-  app.use(authRoutes);
-
-  // Start the server
-  const PORTS = PORT;
-  app.listen(PORTS, () => {
-    console.log(`Server is running on port ${PORTS}.`);
-  });
-// });
+// Start the server
+const PORTS = PORT || 5000;
+app.listen(PORTS, () => {
+  console.log(`Server is running on port ${PORTS}.`);
+});
