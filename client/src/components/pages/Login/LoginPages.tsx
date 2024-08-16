@@ -92,17 +92,17 @@ const LoginPages = () => {
 
   // Login with Google
 const handleGoogleLogin = async () => {
-  window.open(`https://next-js-authentication-jwt-mui-production.up.railway.app/auth/google`, "_self");
+  window.open(`http://localhost:5000/auth/google`, "_self");
 };
 
 // Login with Facebook
 const handleFacebookLogin = async () => {
-  window.open(`https://next-js-authentication-jwt-mui-production.up.railway.app/auth/facebook`, "_self");
+  window.open(`http://localhost:5000/auth/facebook`, "_self");
 };
 
 // Login with GitHub
 const handleGitHubLogin = async () => {
-  window.open(`https://next-js-authentication-jwt-mui-production.up.railway.app/auth/github`, "_self");
+  window.open(`http://localhost:5000/auth/github`, "_self");
 };
 
 
