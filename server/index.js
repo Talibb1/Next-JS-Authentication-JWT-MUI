@@ -1,22 +1,20 @@
 import express from "express";
+import dotenv from 'dotenv';
+dotenv.config();
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectToDatabase from "./db/config.js";
 import router from "./Routes/UserRoutes.js";
 import "./middleware/passport_jwt.js";
-// import "./middleware/setupProxy.js";
 import passport from "passport";
 import helmet from "helmet";
-import { FRONTEND_HOST, PORT, DATABASE_URL } from "./constants/constants.js";
-// import authRoutes from "./Routes/socialAuthRoutes.js"; 
+import {FRONTEND_HOST_PRODUCTION, FRONTEND_HOST_DEVELOPMENT, PORT, DATABASE_URL } from "./constants/constants.js";
+import authRoutes from "./Routes/socialAuthRoutes.js"; 
 import './Controller/google-strategy.js';
-import dotenv from 'dotenv';
-dotenv.config();
 
 // import { fileURLToPath } from 'url';
 // import { dirname, join } from 'path';
 // import next from 'next';
-
 // // Setup Next.js
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = dirname(__filename);
@@ -29,10 +27,9 @@ const app = express();
 
 // Middleware
 const allowedOrigins = [
-  'http://localhost:3000',
-  'https://next-js-authentication-jwt-mui.vercel.app',
+  FRONTEND_HOST_PRODUCTION,
+  FRONTEND_HOST_DEVELOPMENT,
 ];
-
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -68,10 +65,10 @@ connectToDatabase(DATABASE_URL);
   app.use("/api/user", router);
 
   // Authentication Routes (Google, Facebook, GitHub)
-  // app.use(authRoutes);
+  app.use(authRoutes);
 
   // Start the server
-  const PORTS = PORT || 5000;
+  const PORTS = PORT;
   app.listen(PORTS, () => {
     console.log(`Server is running on port ${PORTS}.`);
   });

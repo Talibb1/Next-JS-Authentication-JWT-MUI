@@ -14,13 +14,13 @@ import {
 } from "../types";
 
 // Use environment variable for base URL
-const baseUrl = "https://next-js-authentication-jwt-mui-production.up.railway.app/api/user";
+const baseUrl = process.env.NEXT_PUBLIC_API_URL_PRODUCTION;
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
-    createUser: builder.mutation<ApiResponse<UserResponse>,CreateUserInput>({
+    createUser: builder.mutation<ApiResponse<UserResponse>, CreateUserInput>({
       query: (user) => ({
         url: "register",
         method: "POST",

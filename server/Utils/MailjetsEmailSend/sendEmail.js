@@ -19,7 +19,7 @@
 //     }).save();
 
 //     // Prepare the email content with the plain OTP
-//     const otpVerificationEmailLink = `${process.env.FRONTEND_HOST}/FormOtp?otp=${otp}`;
+//     const otpVerificationEmailLink = `${process.env.FRONTEND_HOST_PRODUCTION}/FormOtp?otp=${otp}`;
 //     const getFormattedDate = () => {
 //       const date = new Date();
 //       const options = { day: '2-digit', month: 'short', year: 'numeric' };

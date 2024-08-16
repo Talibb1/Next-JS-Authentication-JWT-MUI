@@ -8,7 +8,7 @@ export const emailForget = async (email, token, id, userName) => {
   };
 
   const obfuscatedQuery = createObfuscatedQuery(id, token);
-  const resetLink = `${process.env.FRONTEND_EMAIL_LINK}/Reset-Password?data=${obfuscatedQuery}`;
+  const resetLink = `${process.env.FRONTEND_HOST_PRODUCTION}/Reset-Password?data=${obfuscatedQuery}`;
   await sendEmail({
     to: email,
     subject: "Password Reset Request",
