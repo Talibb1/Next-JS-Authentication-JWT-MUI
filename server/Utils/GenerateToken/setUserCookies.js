@@ -5,7 +5,7 @@ const setUserCookies = (res, isAuth, userRole) => {
         httpOnly: true,
         secure: true, // Set to true if using HTTPS
         maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-        sameSite: 'strict', // Adjust according to your requirements
+        sameSite: 'None', // Adjust according to your requirements
       });
   
       // Set Cookie for User Role
@@ -13,7 +13,7 @@ const setUserCookies = (res, isAuth, userRole) => {
         httpOnly: true,
         secure: true, // Set to true if using HTTPS
         maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-        sameSite: 'strict', // Adjust according to your requirements
+        sameSite: 'None', // Adjust according to your requirements
       });
     } catch (error) {
       // Handle errors appropriately
