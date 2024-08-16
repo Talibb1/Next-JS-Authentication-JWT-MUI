@@ -14,7 +14,7 @@ import {
 } from "../types";
 
 // Use environment variable for base URL
-const baseUrl = process.env.NEXT_PUBLIC_API_URL_PRODUCTION;
+const baseUrl = "https://next-js-authentication-jwt-mui-production.up.railway.app/api/user/"
 
 export const authApi = createApi({
   reducerPath: "authApi",
