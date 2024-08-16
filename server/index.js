@@ -46,6 +46,15 @@ app.use(
   })
 );
 
+
+// const corsOptions = {
+//   // set origin to a specific origin.
+//   origin:  ['http://localhost:3000','https://next-js-authentication-jwt-mui.vercel.app'],
+//   credentials: true,
+//   optionsSuccessStatus: 200,
+// };
+// app.use(cors(corsOptions))
+
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());

@@ -11,27 +11,31 @@ const setTokensCookies = (res, accessToken, refreshToken, newAccessTokenExp, new
     // Set Cookie for Access Token
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      secure: true, // Set to true if using HTTPS
+      secure: process.env.NODE_ENV === 'production', // Adjust based on environment
       maxAge: accessTokenMaxAge,
-      sameSite: 'strict', // Adjust according to your requirements
+      sameSite: 'None', // Adjust according to your requirements
+      domain: process.env.NODE_ENV === 'production' ? '.example.com' : 'localhost', // Adjust for local testing
     });
 
     // Set Cookie for Refresh Token
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true, // Set to true if using HTTPS
+      secure: process.env.NODE_ENV === 'production',
       maxAge: refreshTokenMaxAge,
-      sameSite: 'strict', // Adjust according to your requirements
+      sameSite: 'None',
+      domain: process.env.NODE_ENV === 'production' ? '.example.com' : 'localhost',
     });
-    // Set Cookie for Refresh Token
+
+    // Set Cookie for isAuth
     res.cookie('isAuth', true, {
       httpOnly: true,
-      secure: true, // Set to true if using HTTPS
+      secure: process.env.NODE_ENV === 'production',
       maxAge: refreshTokenMaxAge,
-      sameSite: 'strict', // Adjust according to your requirements
+      sameSite: 'None',
+      domain: process.env.NODE_ENV === 'production' ? '.example.com' : 'localhost',
     });
   } catch (error) {
-    // Handle errors appropriately
+    console.error('Failed to set cookies:', error);
     throw new Error('Failed to set cookies');
   }
 };
