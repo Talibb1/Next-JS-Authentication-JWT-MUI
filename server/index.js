@@ -8,7 +8,7 @@ import router from "./Routes/UserRoutes.js";
 import "./middleware/passport_jwt.js";
 import passport from "passport";
 import helmet from "helmet";
-import {FRONTEND_HOST_PRODUCTION, FRONTEND_HOST_DEVELOPMENT, PORT, DATABASE_URL } from "./constants/constants.js";
+import {FRONTEND_HOST_PRODUCTION, PORT, DATABASE_URL } from "./constants/constants.js";
 import authRoutes from "./Routes/socialAuthRoutes.js"; 
 import './Controller/google-strategy.js';
 
@@ -28,7 +28,7 @@ const app = express();
 // Middleware
 const allowedOrigins = [
   FRONTEND_HOST_PRODUCTION,
-  FRONTEND_HOST_DEVELOPMENT,
+  // FRONTEND_HOST_DEVELOPMENT,
 ];
 app.use(
   cors({
