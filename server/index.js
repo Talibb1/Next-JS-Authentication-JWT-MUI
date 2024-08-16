@@ -16,10 +16,7 @@ import './Controller/google-strategy.js';
 const app = express();
 
 // Middleware
-const allowedOrigins = [
-  FRONTEND_HOST_PRODUCTION,
-  // FRONTEND_HOST_DEVELOPMENT,
-];
+const allowedOrigins = ["https://next-js-authentication-jwt-mui.vercel.app/"];
 app.use(
   cors({
     origin: function (origin, callback) {
