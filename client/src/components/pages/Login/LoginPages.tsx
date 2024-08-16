@@ -97,7 +97,7 @@ const handleGoogleLogin = async () => {
 
 // Login with Facebook
 const handleFacebookLogin = async () => {
-  window.open(`http://localhost:5000/auth/facebook`, "_self");
+  window.open(`https://next-js-authentication-jwt-mui-production.up.railway.app/auth/facebook`, "_self");
 };
 
 // Login with GitHub
