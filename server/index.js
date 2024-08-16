@@ -30,6 +30,7 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:3000',
   'https://next-js-authentication-jwt-mui.vercel.app',
+  "https://next-js-authentication-jwt-mui-production.up.railway.app",
 ];
 
 app.use(
