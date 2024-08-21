@@ -27,8 +27,8 @@ const app = express();
 
 // Middleware
 const allowedOrigins = [
-  // 'http://localhost:3000',
   'https://next-js-authentication-jwt-mui.vercel.app',
+  'http://localhost:3000',
 ];
 
 app.use(
