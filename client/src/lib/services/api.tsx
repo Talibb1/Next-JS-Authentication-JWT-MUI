@@ -14,6 +14,7 @@ import {
 } from "../types";
 
 // Use environment variable for base URL
+// const baseUrl = "http://localhost:5000/api/user/";
 const baseUrl = process.env.NEXT_PUBLIC_API_URL_PRODUCTION;
 
 export const authApi = createApi({
